@@ -1,0 +1,566 @@
+.navigation {
+    position: fixed;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(21px);
+
+    padding: 0 40px;
+
+    z-index: 999;
+}
+
+.navigation img{
+    width: 100px;
+    height: 100px;
+}
+
+.navigation .links {
+    display: flex;
+    gap: 40px;
+    font-style: italic;
+    font-weight: 400;
+    color: #FFF;
+}
+
+.header {
+    width: 100%;
+    height: 100vh;
+    background: url('/background-header.png') no-repeat center;
+    background-size: cover;
+
+    position: relative;
+
+    display: flex;
+    padding-top: 100px;
+}
+
+.header .runner {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 00px;
+}
+
+.header .sectionMain {
+    margin-left: 100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.header .sectionMain .btnInscrever {
+    background-color: #FBEA10;
+    display: flex;
+    justify-content: center;
+    width: calc(100% - 80px);
+    padding: 10px 0;
+    border-radius: 15px;
+    border-width: 3px;
+    border-color: #FFF;
+    border-style: solid;
+
+    font-size: 28px;
+    font-weight: 700;
+    font-style: italic;
+    color: #72153D;
+
+    box-shadow: rgba(255, 255, 255, .25) 0 0px 30px;
+    cursor: pointer;
+
+    transition: all .3s;
+
+    z-index: 10;
+}
+.header .sectionMain .btnInscrever:hover {
+    box-shadow: rgba(255, 255, 255, .25) 0 0px 70px;
+}
+
+.header .sectionMain img {
+    margin-top: -20px;
+    height: calc(100vh - 320px);
+}
+
+.yellowSection {
+    background-color: #FBEA10;
+    min-height: 50vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding:  50px 80px;
+    align-items: center;
+}
+
+.yellowSection .textArea {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.yellowSection .textArea h3{
+    font-size: 23px;
+    font-weight: 800;
+    font-style: italic;
+    color: #CB4F24;
+    width: 150px;
+}
+
+.yellowSection .textArea span{
+    font-size: 16px;
+    font-weight: 500;
+    font-style: italic;
+    color: #000;
+    width: 480px;
+    text-align: right;
+    z-index: 5;
+}
+
+.yellowSection img{
+    position: absolute;
+    height: 300px;
+    bottom: -100px 
+}
+
+.providers {
+    margin-top: 120px;
+    display: flex;
+}
+.providers img {
+    width: 300px;
+    opacity: .6;
+}
+
+.aboutSection {
+    display: flex;
+    flex-direction: column;
+    padding: 0 80px;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.aboutSection h2 {
+    font-size: 20px;
+    font-weight: 800;
+    font-style: italic;
+    margin-bottom: 25px;
+}
+
+.aboutSection p {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 300;
+    font-size: 17px;
+}
+
+.routesSection {
+    margin: 30px 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.routesSection .card {
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+}
+
+.routesSection .cardHeader {
+    display: flex;
+    background-color: #1E1E1E;
+    justify-content: space-between;
+    color: white;
+    padding: 7px 20px;
+    border-radius: 10px 10px 0 0;
+    align-items: center;
+}
+
+.routesSection .cardHeader .cardButton {
+    cursor: pointer;
+    padding: 0px 30px;
+    border-radius: 5px;
+    background-color: #FBEA10;
+    font-weight: bold;
+    font-style: italic;
+    color: #CB4F24;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.routesSection .cardHeader span {
+    font-size: 20px;
+    font-weight: 700;
+    width: 100px;
+    line-height: 96%;
+}
+
+/* START CARDSMAP */
+
+.routesSection .mapImage3{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    transition: all .3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.routesSection .mapImage3 span{
+    font-size: 20px;
+    font-weight: 700;
+    position: absolute;
+    color: rgba(255,255,255,0);
+    transition: color .3s;
+}
+.routesSection .mapImage3:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    backdrop-filter: grayscale(100%);
+    cursor: pointer;
+}
+.routesSection .mapImage3:hover span{
+    color: #CB4F24;
+}
+.routesSection .mapImage3:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    filter: grayscale(100%);
+    cursor: pointer;
+}
+
+.routesSection .mapImage5{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    transition: all .3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.routesSection .mapImage5 span{
+    font-size: 20px;
+    font-weight: 700;
+    position: absolute;
+    color: rgba(255,255,255,0);
+    transition: color .3s;
+}
+.routesSection .mapImage5:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    backdrop-filter: grayscale(100%);
+    cursor: pointer;
+}
+.routesSection .mapImage5:hover span{
+    color: #CB4F24;
+}
+.routesSection .mapImage5:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    filter: grayscale(100%);
+    cursor: pointer;
+}
+
+.routesSection .mapImage10{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    transition: all .3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.routesSection .mapImage10 span{
+    font-size: 20px;
+    font-weight: 700;
+    position: absolute;
+    color: rgba(255,255,255,0);
+    transition: color .3s;
+}
+.routesSection .mapImage10:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    backdrop-filter: grayscale(100%);
+    cursor: pointer;
+}
+.routesSection .mapImage10:hover span{
+    color: #CB4F24;
+}
+.routesSection .mapImage10:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    filter: grayscale(100%);
+    cursor: pointer;
+}
+
+.routesSection .mapImage15{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    transition: all .3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.routesSection .mapImage15 span{
+    font-size: 20px;
+    font-weight: 700;
+    position: absolute;
+    color: rgba(255,255,255,0);
+    transition: color .3s;
+}
+.routesSection .mapImage15:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    backdrop-filter: grayscale(100%);
+    cursor: pointer;
+}
+.routesSection .mapImage15:hover span{
+    color: #CB4F24;
+}
+.routesSection .mapImage15:hover{
+    background-image: url('/tempMap.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    height: 220px;
+    width: 330px;
+    border-radius: 0 0 10px 10px;
+    filter: grayscale(100%);
+    cursor: pointer;
+}
+
+/* END CARDSMAP */
+
+
+.kitSection {
+    margin: 80px 150px 50px 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.kitSection .cardGetKit {
+    display: flex;
+    flex-direction: column;
+    max-width: 410px;
+}
+
+.kitSection .cardGetKit h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.kitSection .cardGetKit p {
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.kitSection .cardInvoice {
+    min-height: 350px;
+    min-width: 290px;
+    background-color: #FFF;
+    border-radius: 20px;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.kitSection .cardInvoice h3 {
+    font-size: 19px;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.kitSection .cardInvoice .smallLetters {
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    line-height: 5px;
+}
+
+.kitSection .cardInvoice .infoInvoice {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+}
+
+.kitSection .cardInvoice .listItems {
+    list-style: circle;
+    margin-left: 20px;
+    font-size: 15px;
+    line-height: 17px;
+}
+
+.kitSection .cardInvoiceHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.kitSection .subTotal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.kitSection .subTotal span:first-child {
+    font-size: 16px;
+    font-weight: 600;
+    font-style: italic;
+    line-height: 10px;
+}
+
+.kitSection .subTotal span:last-child {
+    font-size: 20px;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.photosSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.photosSection div{
+    display: flex;
+    flex: 1;
+    min-height: 500px;
+}
+
+.photosSection .photo1 {
+    background: url('/SliderImage01.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo2 {
+    background: url('/SliderImage02.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo3 {
+    background: url('/SliderImage03.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo4 {
+    background: url('/SliderImage04.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo5 {
+    background: url('/SliderImage05.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo6 {
+    background: url('/SliderImage06.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo7 {
+    background: url('/SliderImage07.JPG') no-repeat center;
+    background-size: cover;
+}
+.photosSection .photo8 {
+    background: url('/SliderImage08.JPG') no-repeat center;
+    background-size: cover;
+}
+
+.contactSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0;
+}
+
+.contactSection h2 {
+    font-size: 20px;
+    font-weight: 800;
+    font-style: italic;
+    margin-bottom: 25px;
+}
+
+.contactSection div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.contactSection div span{
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.finalLine {
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
+}
+
+/* Responsive */
+
