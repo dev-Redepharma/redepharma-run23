@@ -100,6 +100,8 @@
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
+    align-items: center;
+    gap: 15px
 }
 
 .yellowSection .textArea h3{
@@ -107,7 +109,7 @@
     font-weight: 800;
     font-style: italic;
     color: #CB4F24;
-    width: 150px;
+    max-width: 150px;
 }
 
 .yellowSection .textArea span{
@@ -115,7 +117,7 @@
     font-weight: 500;
     font-style: italic;
     color: #000;
-    width: 480px;
+    max-width: 480px;
     text-align: right;
     z-index: 5;
 }
@@ -918,7 +920,7 @@
         font-weight: 500;
         font-style: italic;
         color: #000;
-        width: 400px;
+        max-width: 400px;
         text-align: right;
         z-index: 5;
     }
@@ -984,7 +986,7 @@
         position: relative;
     
         display: flex;
-        padding-top: 100px;
+        padding-top: 0px;
     }
 
     .header .runner {
@@ -997,8 +999,15 @@
         display: flex;
         align-items: center;
         flex-direction: column;
+        justify-content: center;
         height: 100%;
         width: 100%;
+    }
+
+    .header .sectionMain img {
+        margin-top: -80px;
+        width: calc(100vw);
+        height: auto;
     }
 
     .routesSection {
@@ -1015,5 +1024,155 @@
         grid-template-columns: 1fr;
         justify-items: center;
         align-items: center;
+        gap: 40px
+    }
+
+    .kitSection .cardGetKit p {
+        text-align: center;
+    }
+}
+
+@media (max-width: 630px) {
+    .navigation {
+        position: fixed;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(21px);
+    
+        padding: 0 20px;
+    
+        z-index: 999;
+    }
+    
+    .navigation img{
+        display: none;
+    }
+    
+    .navigation .links {
+        display: flex;
+        gap: 10px;
+        font-style: italic;
+        font-weight: 600;
+        color: #FFF;
+        font-size: 14px;
+    }
+
+    .header .sectionMain {
+        margin-left: 50px;
+        margin-right: 50px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 550px) {
+    .yellowSection .textArea {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .yellowSection {
+        padding: 50px 30px;
+    }
+
+    .yellowSection .textArea h3{
+        font-size: 23px;
+        font-weight: 800;
+        font-style: italic;
+        color: #CB4F24;
+        max-width: 350px;
+        text-align: center;
+    }
+    
+    .yellowSection .textArea span{
+        font-size: 16px;
+        font-weight: 500;
+        font-style: italic;
+        color: #000;
+        max-width: 480px;
+        text-align: center;
+        z-index: 5;
+    }
+
+    .aboutSection {
+        display: flex;
+        flex-direction: column;
+        padding: 0 30px;
+        align-items: center;
+        margin-top: 100px;
+    }
+
+    .routesSection {
+        margin: 30px 30px;
+        display: grid;
+        grid-template-columns:1fr;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .kitSection {
+        margin: 50px 30px 50px 30px;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .contactSection {
+        padding: 0 30px;
+    }
+
+    .contactSection div span{
+        text-align: center;
+    }
+}
+
+@media (max-width: 450px) {
+    .header .sectionMain {
+        margin-left: 5px;
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 340px) {
+    .navigation {
+        position: fixed;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(21px);
+    
+        padding: 0 10px;
+    
+        z-index: 999;
+    }
+    
+    .navigation img{
+        display: none;
+    }
+    
+    .navigation .links {
+        display: flex;
+        gap: 8px;
+        font-style: italic;
+        font-weight: 600;
+        color: #FFF;
+        font-size: 12px;
     }
 }
