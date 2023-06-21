@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form'
 import { Loading } from "@/components/Loading";
 import { AuthContext } from '@/contexts/AuthContext';
-import { setCookie } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 import axios from 'axios'
 
 export default function Login() {
@@ -50,5 +50,21 @@ export default function Login() {
                 </form>
             </main>
         )
+    }
+}
+
+export async function getServerSideProps(ctx) {
+    const {'token.authRRUN23' : token} = parseCookies(ctx)
+    if(token){
+        return {
+            redirect: {
+                destination: '/dashboard',
+                permanent: false,
+            }
+        }
+    }
+
+    return {
+        props: {}
     }
 }

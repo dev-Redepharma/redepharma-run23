@@ -14,7 +14,14 @@ export default function Dashboard() {
 export async function getServerSideProps(ctx) {
     const { 'token.authRRUN23' : token} = parseCookies(ctx)
     console.log(token)
-
+    if(!token){
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false,
+            }
+        }
+    }
     return {
         props: {token}
     }
