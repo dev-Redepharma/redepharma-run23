@@ -1,12 +1,12 @@
 import mysql from 'mysql2/promise';
 import bcrypt from 'bcrypt'
 
-export default async function AddFilial(req, res) {
+export default async function Login(req, res) {
     const db = await mysql.createConnection({
-        host: 'redepharma.com.br',
-        user: 'redeph12_corrida',
-        password:'redeph12@corrida',
-        database: 'redeph12_run23'
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password:process.env.DB_PASSWORD,
+        database: process.env.DB_DB
       });
       db.connect()
       try{
@@ -40,6 +40,6 @@ export default async function AddFilial(req, res) {
         res.status(200).send(output)
       }catch{
         db.end();
-        res.status(444).send({error: "Ocorreu um erro com o banco de dados"})
+        res.status(444).send({status: false, message: "Ocorreu um erro com o banco de dados"})
       }
 }

@@ -1,13 +1,17 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form'
 import { Loading } from "@/components/Loading";
+import { AuthContext } from '@/contexts/AuthContext';
+import { setCookie } from 'nookies';
 import axios from 'axios'
 
 export default function Login() {
     const {register, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(false)
+    const { setLogin } = useContext(AuthContext)
+    
 
     const router = useRouter()
     
@@ -24,10 +28,14 @@ export default function Login() {
                     setIsLoading(true)
                     axios.post('/api/auth/login', data)
                     .then(result => {
-                        console.log(result.data)
                         setIsLoading(false)
-
-                        result.data.status == false ? setHasError(result.data.message) : ''
+                        if(result.data.status == false) {
+                            setHasError(result.data.message)
+                        }else{
+                            setLogin(result.data)
+                            setCookie(null, 'token.authRRUN23', result.data.token)
+                            router.push("/dashboard")
+                        }
                     })
                     .catch(err => {
                         console.log(err)

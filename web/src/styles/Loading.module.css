@@ -21,12 +21,7 @@
     bottom: 0;
     right: -40%;
     background: #FBEA10 !important; }
-  
-  /* .back.one {
-    width: 30%;
-    height: 8%;
-    animation: elem 2.6s linear infinite; } */
-  
+
   .back.two {
     width: 40%;
     height: 46%;
@@ -52,21 +47,7 @@
     height: 4px;
     background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%) !important;
     bottom: 0; }
-    /* .floor .rock {
-      bottom: 0;
-      right: -20px; }
-    .floor .rock.one {
-      width: 16px;
-      height: 26px;
-      animation: elem 3s linear infinite; } */
-    /* .floor .rock.two {
-      width: 20px;
-      height: 18px;
-      animation: elem 3s linear infinite 0.4s; }
-    .floor .rock.three {
-      width: 13px;
-      height: 26px;
-      animation: elem 3s linear infinite 1.3s; } */
+
     .floor .grass {
         background: #6CA721;
       width: 2px;
@@ -102,38 +83,6 @@
     .floor .grass.ten {
       height: 6px;
       animation: elem 3s linear infinite 1.8s; }
-  
-  /* .cloud {
-    height: 20px;
-    right: -160px;
-    background: rgba(255, 255, 255, 0.3) !important; }
-    .cloud::before, .cloud::after {
-      background: rgba(255, 255, 255, 0.3) !important; }
-    .cloud::before {
-      width: 80%;
-      height: 50%;
-      bottom: -25%;
-      left: -20%; }
-    .cloud::after {
-      width: 60%;
-      height: 30%;
-      top: -15%;
-      right: -10%; }
-  
-  .cloud.one {
-    width: 100px;
-    top: 60px;
-    animation: cloud 3s linear infinite; }
-  
-  .cloud.two {
-    width: 80px;
-    top: 20px;
-    animation: cloud 2.6s linear infinite 0.5s; }
-  
-  .cloud.three {
-    width: 130px;
-    top: 110px;
-    animation: cloud 3.2s linear infinite 1s; } */
   
   .stick {
     width: 6px;
