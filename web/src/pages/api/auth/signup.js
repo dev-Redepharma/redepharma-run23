@@ -21,7 +21,7 @@ export default async function Cadastro(req, res){
   const resultzinho = await db.execute(queryzinha, valuezinho);
 
   if((resultzinho[0]).length != 0){
-    res.status(409).send({status: false, message: "Esse e-mail já foi utilizado."})
+    res.status(200).send({status: false, message: "Esse e-mail já foi utilizado."})
   }else{
     const senhaEncrypted = await bcrypt.hash(senha, 10)
     const query = `INSERT INTO accounts VALUES ('${v4()}', ?, ?, ?)`;
@@ -34,7 +34,7 @@ export default async function Cadastro(req, res){
             })
         })
         .catch(err => {
-        res.status(444).send({
+        res.status(200).send({
             message: "Não foi possível criar o usuário, tente novamente!",
             status: false,
             err: err

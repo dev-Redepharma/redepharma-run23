@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-export default async function Reload(req, res) {
+export default async function RunnersById(req, res) {
     const db = await mysql.createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -10,21 +10,12 @@ export default async function Reload(req, res) {
       db.connect()
       try{
         const { id } = req.body;
-        const query = `SELECT * FROM accounts WHERE id = ?`;
+        const query = `SELECT * FROM runners WHERE authorId = ?`;
         const values = [id];
         const result = await db.execute(query, values);
         db.end();
-
-        var output = {}
-        output["status"] = true;
-        output["token"] = result[0][0].id
-        output["user"] = {
-            id: result[0][0].id,
-            nome: result[0][0].nome,
-            email: result[0][0].email
-        }
         
-        res.status(200).send(output)
+        res.status(200).send(result[0])
       }catch{
         db.end();
         res.status(200).send({status: false, message: "Ocorreu um erro com o banco de dados"})

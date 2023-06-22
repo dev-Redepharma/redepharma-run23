@@ -40,6 +40,6 @@ export default async function Login(req, res) {
         res.status(200).send(output)
       }catch{
         db.end();
-        res.status(444).send({status: false, message: "Ocorreu um erro com o banco de dados"})
+        res.status(200).send({status: false, message: "Ocorreu um erro com o banco de dados"})
       }
 }
