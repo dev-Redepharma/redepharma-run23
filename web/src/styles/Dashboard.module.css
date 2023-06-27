@@ -1,0 +1,17 @@
+.navDashboard img{
+    width: 80px;
+}
+.navDashboard {
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.gradientBorder {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
+    position: absolute;
+    bottom: -4px;
+}
