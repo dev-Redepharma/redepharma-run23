@@ -35,6 +35,7 @@ export default function Subscribe() {
                             <form onSubmit={handleSubmit((data =>{
                                 console.log(data.senhaVerificao, data.senha)
                                 if(data.senha == data.senhaVerificao){
+                                    setIsLoading(true)
                                     axios.post('/api/auth/signup', data)
                                         .then(result => {
                                             if(result.data.status == false) {

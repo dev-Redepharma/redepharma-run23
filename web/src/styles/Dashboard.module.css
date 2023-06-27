@@ -15,3 +15,22 @@
     position: absolute;
     bottom: -4px;
 }
+
+.button{
+    border: none;
+    color: #FFF;
+    border-radius: 8px;
+    background-color: #E94E1B !important;
+    height: 40px;
+    padding: 8px 17px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    transition: all .3s;
+  }
+  
+  .button:hover{
+    cursor: pointer;
+    background-color: #C5451C !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
