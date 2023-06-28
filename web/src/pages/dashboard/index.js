@@ -29,9 +29,9 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
                     <img src="RunBlack.png"/>
-                    <div className="flex items-center gap-2" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
-                    <span className="text-[17px] font-bold italic">Sair</span>
-                    <HiLogout></HiLogout>  
+                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
+                        <span className="text-[17px] font-bold italic">Sair</span>
+                        <HiLogout></HiLogout>  
                     </div>
                 </div>
                 <div className={styles.gradientBorder}></div>
@@ -73,12 +73,12 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                         
                         {/* VERIFICA SE ESSA PESSOA JÁ PAGOU */}
                         {runner.status == 'confirmado' ? 
-                        <div className="flex items-center gap-4">
+                        <div className={`${styles.buttonStatusRunner} flex items-center gap-4 cursor-pointer`}>
                             <HiPrinter size={25}></HiPrinter>
                             <span>Imprimir cartão de confirmação</span>
                         </div>
                          : 
-                        <div onClick={() => setAndOpenModal(runner.id)} className="flex items-center gap-4">
+                        <div onClick={() => setAndOpenModal(runner.id)} className={`${styles.buttonStatusRunner} flex items-center gap-4 cursor-pointer`}>
                             <HiX size={25}></HiX>
                             <span>Retirar corredor</span>
                         </div>

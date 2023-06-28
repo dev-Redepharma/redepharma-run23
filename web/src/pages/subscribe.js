@@ -34,44 +34,48 @@ export default function Subscribe() {
                             <h1 className='text-4xl font-bold italic text-[#72153D] mb-9'>Cadastro</h1>
                             <form onSubmit={handleSubmit((data =>{
                                 console.log(data.senhaVerificao, data.senha)
-                                if(data.senha == data.senhaVerificao){
-                                    setIsLoading(true)
-                                    axios.post('/api/auth/signup', data)
-                                        .then(result => {
-                                            if(result.data.status == false) {
-                                                setHasError(result.data.message)
-                                                return
-                                            }
-                                            router.push('/login')
-                                            setIsLoading(false)
-                                        })
-                                        .catch(err => {
-                                            console.log(err)
-                                            alert("Ocorreu um erro, tente novamente mais tarde")
-                                        })
-                                    }else{
-                                        setHasError('As senhas não são semelhantes')
-                                    }
+                                if(data.confirmRules){
+                                    if(data.senha == data.senhaVerificao){
+                                        setIsLoading(true)
+                                        axios.post('/api/auth/signup', data)
+                                            .then(result => {
+                                                if(result.data.status == false) {
+                                                    setHasError(result.data.message)
+                                                    return
+                                                }
+                                                router.push('/login')
+                                                setIsLoading(false)
+                                            })
+                                            .catch(err => {
+                                                console.log(err)
+                                                alert("Ocorreu um erro, tente novamente mais tarde")
+                                            })
+                                        }else{
+                                            setHasError('As senhas não são semelhantes')
+                                        }
+                                }else{
+                                    setHasError('Para prosseguir você precisa confirmar o regulamento')
+                                }
                             }))}>
                                 <div className={styles.groupInput}>
                                     <div className={styles.inputUser}>
                                     <p>Nome:</p>
-                                    <input {...register("nome")} className={styles.input} autoComplete='username' placeholder='Fulano de Tal'/>
+                                    <input {...register("nome")} className={styles.input} autoComplete='username' placeholder='Fulano de Tal' required/>
                                     <HiUser height={18} color="#bbb"/>
                                     </div>
                                     <div className={styles.inputUser}>
                                     <p>Email:</p>
-                                    <input {...register("email")} className={styles.input} type='email' autoComplete='username' placeholder='exemplo@email.com'/>
+                                    <input {...register("email")} className={styles.input} type='email' autoComplete='username' placeholder='exemplo@email.com' required/>
                                     <HiAtSymbol height={18} color="#bbb"/>
                                     </div>
                                     <div className={styles.inputPassword}>
                                     <p>Senha:</p>
-                                    <input {...register("senha")} className={styles.input} type="password" autoComplete='current-password' placeholder='••••••'/>
+                                    <input {...register("senha")} className={styles.input} type="password" autoComplete='current-password' placeholder='••••••' required/>
                                     <HiLockClosed height={18} color="#bbb"/>
                                     </div>
                                     <div className={styles.inputPassword}>
                                     <p>Repetir a senha:</p>
-                                    <input {...register("senhaVerificao")} className={styles.input} type="password" autoComplete='current-password' placeholder='••••••'/>
+                                    <input {...register("senhaVerificao")} className={styles.input} type="password" autoComplete='current-password' placeholder='••••••' required/>
                                     <HiLockClosed height={18} color="#bbb"/>
                                     </div>
                                 </div>
@@ -79,9 +83,9 @@ export default function Subscribe() {
                                 <div className={styles.groupRow}>
                                     <div className={styles.checkRemember}>
                                     <label className={styles.chk}>
-                                        <input {...register("longLogin")} type='checkbox'/>
+                                        <input {...register("confirmRules")} type='checkbox'/>
                                         <span/>
-                                        <p>LI e COMPREENDI o REGULAMENTO da corrida</p>
+                                        <p>LI e COMPREENDI o <a className={styles.anchorRules} href='/regulamento.pdf'>REGULAMENTO</a> da corrida</p>
                                     </label>
                                     </div>
                                 </div>

@@ -16,12 +16,14 @@ export default async function RemoveRunnerAPI(req, res){
   const values = [id];
   await db.execute(query, values)
     .then(() => {
+    db.end();
     res.status(200).send({
       message: "Corredor removido com sucesso!",
       status: true
       })
     })
     .catch(err => {
+    db.end();
     res.status(200).send({
       message: "Não foi possível remover o corredor, tente novamente!",
       status: false,

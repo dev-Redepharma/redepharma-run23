@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google'
 import { Loading } from "@/components/Loading";
 import { AuthContext } from '@/contexts/AuthContext';
 import { parseCookies, setCookie } from 'nookies';
+import Modal from 'react-modal';
 import { HiAtSymbol, HiLockClosed } from 'react-icons/hi';
 import { HiExclamationTriangle } from 'react-icons/hi2';
 import axios from 'axios'
@@ -13,12 +14,33 @@ import styles from '@/styles/Login.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    },
+  };
+
+Modal.setAppElement('#__next');
+
 export default function Login() {
     const {register, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState('')
     const { setLogin } = useContext(AuthContext)
-    
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+    function openModal() {
+        setIsOpen(true);
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     const router = useRouter()
     
@@ -44,7 +66,15 @@ export default function Login() {
                                         setHasError(result.data.message)
                                     }else{
                                         setLogin(result.data)
-                                        setCookie(null, 'token.authRRUN23', result.data.token)
+                                        if(data.longLogin){
+                                            setCookie(null, 'token.authRRUN23', result.data.token, {
+                                                maxAge: 60 * 60 * 24 * 30 // 30 dias
+                                            })
+                                        }else{
+                                            setCookie(null, 'token.authRRUN23', result.data.token, {
+                                                maxAge: 60 * 60 * 5 // 5 horas
+                                            })
+                                        }
                                         router.push("/dashboard")
                                     }
                                 })
@@ -55,14 +85,14 @@ export default function Login() {
                             })}>
                                 <div className={styles.groupInput}>
                                     <div className={styles.inputUser}>
-                                    <p>Email:</p>
-                                    <input {...register("email")} type='email' className={styles.input} autoComplete='username' placeholder='exemplo@email.com'/>
-                                    <HiAtSymbol height={18} color="#bbb"/>
+                                        <p>Email:</p>
+                                        <input {...register("email")} type='email' className={styles.input} autoComplete='username' placeholder='exemplo@email.com' required/>
+                                        <HiAtSymbol height={18} color="#bbb"/>
                                     </div>
                                     <div className={styles.inputPassword}>
-                                    <p>Senha:</p>
-                                    <input {...register("senha")} className={styles.input} type="password" autoComplete='current-password' placeholder='••••••'/>
-                                    <HiLockClosed height={18} color="#bbb"/>
+                                        <p>Senha:</p>
+                                        <input {...register("senha")} className={styles.input} type="password" autoComplete='current-password' placeholder='••••••' required/>
+                                        <HiLockClosed height={18} color="#bbb"/>
                                     </div>
                                 </div>
 
@@ -74,7 +104,9 @@ export default function Login() {
                                         <p>Lembrar por 30 dias</p>
                                     </label>
                                     </div>
-                                    <a>Esqueci a senha</a>
+                                    <div className={styles.boxChange} onClick={openModal}>
+                                        <span>Esqueci a senha</span>
+                                    </div>
                                 </div>
                                 <div className={styles.groupInput}>
                                     <input className={styles.button} value="Entrar" type="submit"/>
@@ -83,6 +115,21 @@ export default function Login() {
                                     </div>
                                 </div>
                             </form>
+                            <div className={`${styles.boxChange} flex justify-center`} onClick={() => router.push('/subscribe')}>
+                                <span>Registre-se</span>
+                            </div>
+                            <Modal
+                                isOpen={modalIsOpen}
+                                onRequestClose={closeModal}
+                                style={customStyles}
+                                contentLabel="Example Modal"
+                            >
+                                <form className='flex flex-col w-[65vh] '>
+                                    <label className='text-[23px font-bold'>Digite seu email:</label>
+                                    <input className='rounded-[8px]  h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px] mt-[15px] mb-[15px]' type='email'/>
+                                    <input type='submit' value='Recuperar Senha' className={styles.buttonModal} />
+                                </form>
+                            </Modal>
                         </div>
                         <img src="/woman-isticandolse.png"/>
                     </div>

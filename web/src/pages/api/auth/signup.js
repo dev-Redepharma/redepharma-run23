@@ -28,12 +28,14 @@ export default async function Cadastro(req, res){
     const values = [nome, email, senhaEncrypted];
     await db.execute(query, values)
       .then(() => {
+        db.end();
         res.status(200).send({
             message: "Usuário, cadastrado com sucesso, você já pode utilizar nosso sistema!",
             status: true
             })
         })
         .catch(err => {
+        db.end();
         res.status(200).send({
             message: "Não foi possível criar o usuário, tente novamente!",
             status: false,

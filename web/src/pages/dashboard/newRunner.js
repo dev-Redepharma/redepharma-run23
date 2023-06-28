@@ -7,22 +7,34 @@ import { Inter } from 'next/font/google';
 import axios from 'axios'
 
 import styles from '@/styles/Dashboard.module.css'
-
+import stylesRunner from '@/styles/NewRunner.module.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function NewRunner({token}) {
     const {register, handleSubmit} = useForm()
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(null)
+    const [isPCD, setIsPCD] = useState(false)
+    const [isLowIncome, setisLowIncome] = useState(false)
 
     const router = useRouter()
 
+    function handleChangePCD(){
+        setIsPCD(!isPCD)
+    }
+
+    function handleChangeLowIncome(){
+        setisLowIncome(!isLowIncome)
+    }
+
     return (
+        
         <main className={inter.className}>
+            
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
                     <img src="/RunBlack.png"/>
-                    <div className="flex items-center gap-2" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
+                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
                         <span className="text-[17px] font-bold italic">Sair</span>
                         <HiLogout></HiLogout>  
                     </div>
@@ -58,11 +70,11 @@ export default function NewRunner({token}) {
             }))}>
                 <div className='flex flex-col'>
                     <label>Nome:</label>
-                    <input {...register("name")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'></input>
+                    <input {...register("name")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>CPF:</label>
-                    <input {...register("cpf")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'></input>
+                    <input {...register("cpf")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>Celular:</label>
@@ -70,7 +82,7 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>Percurso:</label>
-                    <select {...register("category")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'>
+                    <select {...register("category")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required>
                         <option></option>
                         <option value='3'>3KM</option>
                         <option value='5'>5KM</option>
@@ -80,11 +92,11 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>Data de nascimento:</label>
-                    <input {...register("bornDate")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'></input>
+                    <input {...register("bornDate")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>Gênero:</label>
-                    <select {...register("gender")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'>
+                    <select {...register("gender")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required>
                         <option></option>
                         <option value='masculino'>Masculino</option>
                         <option value='feminino'>Feminino</option>
@@ -96,14 +108,32 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>Informações adicionais:</label>
-                    <input {...register("pcd")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='checkbox'></input>
-                    <span>PCD - Pessoa Com Deficiência</span>
-                    <input {...register("lowIncome")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='checkbox'></input>
-                    <span>Baixa Renda</span>
+                    <div className='flex items-center gap-2'>
+                        <input {...register("pcd")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='checkbox' onChange={handleChangePCD}></input>
+                        <span>PCD - Pessoa Com Deficiência</span>
+                    </div>
+                    {!isPCD ? <div></div> :
+                         <div className='flex flex-col pt-[18px] pb-[25px]'>
+                            <label {...register("attachmentPCD")}>Selecione o comprovante PCD: </label>
+                            <input type='file' required/>
+                        </div>
+                    }
+                    <div className='flex items-center gap-2'>
+                        <input {...register("lowIncome")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='checkbox' onChange={handleChangeLowIncome}></input>
+                        <span>Baixa Renda</span>
+                    </div>
+                    {!isLowIncome ? <div></div> :
+                         <div className='flex flex-col pt-[18px] pb-[25px]'>
+                            <label {...register("numberNIS")}>Informe seu número do NIS: </label>
+                            <input className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required/>
+                        </div>
+                    }
                 </div>
-                <input type='submit' value='Adicionar Corredor' />
-                <div onClick={() => {router.push('/dashboard')}}>Cancelar</div>
-                <span>{hasError}</span>
+                <div className='flex justify-center gap-10'>
+                    <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>
+                    <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>
+                    <span>{hasError}</span>
+                </div>
             </form>
         </main>
         //     <input type='text' ></input>

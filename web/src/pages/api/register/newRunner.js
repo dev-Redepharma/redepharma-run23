@@ -26,12 +26,14 @@ export default async function NewRunnerAPI(req, res){
     const values = [token, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome];
     await db.execute(query, values)
       .then(() => {
+        db.end();
         res.status(200).send({
             message: "Corredor cadastrado com sucesso!",
             status: true
             })
         })
         .catch(err => {
+        db.end();
         res.status(200).send({
             message: "Não foi possível cadastrar o corredor, tente novamente!",
             status: false,
