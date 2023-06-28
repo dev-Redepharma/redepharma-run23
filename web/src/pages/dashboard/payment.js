@@ -3,16 +3,19 @@ import { HiLogout, HiUserAdd, HiUserCircle, HiCheck, HiCash } from "react-icons/
 import { HiExclamationCircle } from 'react-icons/hi2';
 
 import { Inter } from "next/font/google";
+import { destroyCookie } from 'nookies';
+import { useRouter } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Payment(){
+    const router = useRouter()
     return(
         <main className={inter.className}>
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
                     <img src="/RunBlack.png"/>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
                         <span className="text-[17px] font-bold italic">Sair</span>
                         <HiLogout></HiLogout>  
                     </div>

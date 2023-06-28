@@ -1,12 +1,13 @@
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 import { HiClock, HiCheckCircle, HiExclamationCircle, HiPrinter } from "react-icons/hi2"
 import { HiLogout, HiUserAdd, HiUserCircle, HiCash, HiX } from "react-icons/hi";
-import axios from "axios";
-import styles from "@/styles/Dashboard.module.css";
 import { Inter } from "next/font/google";
+import axios from "axios";
+
+import styles from "@/styles/Dashboard.module.css";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,12 +16,20 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
 
     const router = useRouter();
 
+    function setAndOpenModal(data) {
+        if(window.confirm("Ao remover essa pessoa, os dados dela serão apagados, e caso ela vá correr, você precisará preencher todos os dados novamente.")){
+            axios.post('/api/register/removeRunner', {id: data}).then(result => {location.reload()}).catch(err => {alert("Erro desconhecido, se persistir, por favor, entrar em contato com a Redepharma"); console.log(err)})
+        }else{
+            return
+        }
+    }
+
     return (
         <main className={inter.className}>
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
                     <img src="RunBlack.png"/>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
                     <span className="text-[17px] font-bold italic">Sair</span>
                     <HiLogout></HiLogout>  
                     </div>
@@ -69,7 +78,7 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                             <span>Imprimir cartão de confirmação</span>
                         </div>
                          : 
-                        <div className="flex items-center gap-4">
+                        <div onClick={() => setAndOpenModal(runner.id)} className="flex items-center gap-4">
                             <HiX size={25}></HiX>
                             <span>Retirar corredor</span>
                         </div>
@@ -79,9 +88,11 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                     )}
 
                 {/* SE TIVER EM ANÁLISE ELE AVISA SOBRE O TEMPO */}
+                    {analisingRunner ? 
                     <div className="flex w-full py-[45px] justify-center">
                         <span>Pessoas em análise podem levar até 72hrs para serem validadas</span>
                     </div>
+                    : ''}
                 
                 {/* VERIFICA SE EXISTE AINDA PESSOAS PARA PAGAR */}
                 {pendingPayment ? 

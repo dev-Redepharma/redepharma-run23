@@ -13,7 +13,7 @@ export default async function NewRunnerAPI(req, res){
 
   const {token, name, cpf, phone, category, bornDate, gender, cep, pcd, lowIncome} = req.body;
 
-
+  const status = pcd ? 'analise' : lowIncome ? 'analise' : 'pendente'
 
   const queryzinha = `SELECT * FROM runners WHERE cpf = ?`
   const valuezinho = [cpf]
@@ -22,8 +22,8 @@ export default async function NewRunnerAPI(req, res){
   if((resultzinho[0]).length != 0){
     res.status(200).send({status: false, message: "Esse CPF já foi cadastrado."})
   }else{
-    const query = `INSERT INTO runners (id, authorId, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?, 'pendente', '0', '0');`;
-    const values = [token, name, cpf, phone, category, bornDate, gender, cep];
+    const query = `INSERT INTO runners (id, authorId, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+    const values = [token, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome];
     await db.execute(query, values)
       .then(() => {
         res.status(200).send({
