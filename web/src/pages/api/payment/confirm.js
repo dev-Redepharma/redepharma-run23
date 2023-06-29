@@ -84,31 +84,17 @@ export default async function ConfirmPayAPI(req, res){
           "Content-Type": "application/json"
       }
       })
-      .then(result => {
+      .then(async result => {
+        const queryPix = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?)`
+        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, camisa]
+        await db.execute(queryPix, valuesPix)
         res.status(200).send(result.data)
         return
       })
       .catch(err => {
-        res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento."})
+        res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento.", err})
       })
     }
 
-db.end()
-//   const query = `DELETE FROM runners WHERE (id = ?);`;
-//   const values = [id];
-//   await db.execute(query, values)
-//     .then(() => {
-//     res.status(200).send({
-//       message: "Corredor removido com sucesso!",
-//       status: true
-//       })
-//     })
-//     .catch(err => {
-//     res.status(200).send({
-//       message: "Não foi possível remover o corredor, tente novamente!",
-//       status: false,
-//       err: err
-//       })
-//     })
-
+    db.end()
 }
