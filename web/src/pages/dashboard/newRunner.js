@@ -3,11 +3,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { parseCookies, destroyCookie } from 'nookies';
 import { HiLogout } from 'react-icons/hi';
+import { HiExclamationTriangle } from 'react-icons/hi2';
 import { Inter } from 'next/font/google';
+import InputMask from 'react-input-mask';
 import axios from 'axios'
 
 import styles from '@/styles/Dashboard.module.css'
 import stylesRunner from '@/styles/NewRunner.module.css'
+import { cpf } from 'cpf-cnpj-validator';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function NewRunner({token}) {
@@ -42,31 +45,35 @@ export default function NewRunner({token}) {
                 <div className={styles.gradientBorder}></div>
             </nav>
             <form className='py-[50px] px-[80px]' onSubmit={handleSubmit((data =>{
-                axios.post('/api/register/newRunner', {
-                    name: data.name,
-                    cpf: data.cpf,
-                    phone: data.phone,
-                    bornDate: data.bornDate,
-                    gender: data.gender,
-                    cep: data.cep,
-                    pcd: data.pcd,
-                    category: data.category,
-                    lowIncome: data.lowIncome,
-                    token: token
-                })
-                    .then(result => {
-                        setIsLoading(false)
-                        if(result.data.status == false) {
-                            setHasError(result.data.message)
-                            console.log(result.data.err)
-                            return
-                        }
-                        router.push('/dashboard')
+                if(cpf.isValid(data.cpf)){
+                    axios.post('/api/register/newRunner', {
+                        name: data.name,
+                        cpf: data.cpf,
+                        phone: data.phone,
+                        bornDate: data.bornDate,
+                        gender: data.gender,
+                        cep: data.cep,
+                        pcd: data.pcd,
+                        category: data.category,
+                        lowIncome: data.lowIncome,
+                        token: token
                     })
-                    .catch(err => {
-                        console.log(err)
-                        alert("Ocorreu um erro, tente novamente mais tarde")
-                    })
+                        .then(result => {
+                            setIsLoading(false)
+                            if(result.data.status == false) {
+                                setHasError(result.data.message)
+                                console.log(result.data.err)
+                                return
+                            }
+                            router.push('/dashboard')
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            alert("Ocorreu um erro, tente novamente mais tarde")
+                        })
+                }else{
+                    setHasError("CPF Inválido")
+                }
             }))}>
                 <div className='flex flex-col'>
                     <label>Nome:</label>
@@ -74,11 +81,11 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>CPF:</label>
-                    <input {...register("cpf")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                    <InputMask {...register("cpf")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="999.999.999-99" maskChar="" required></InputMask>
                 </div>
                 <div className='flex flex-col'>
                     <label>Celular:</label>
-                    <input {...register("phone")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'></input>
+                    <InputMask {...register("phone")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="99 9 9999-9999" maskChar="" required></InputMask>
                 </div>
                 <div className='flex flex-col'>
                     <label>Percurso:</label>
@@ -92,7 +99,7 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>Data de nascimento:</label>
-                    <input {...register("bornDate")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                    <InputMask {...register("bornDate")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="99/99/9999" maskChar="" required></InputMask>
                 </div>
                 <div className='flex flex-col'>
                     <label>Gênero:</label>
@@ -104,7 +111,7 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>CEP:</label>
-                    <input {...register("cep")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text'></input>
+                    <InputMask {...register("cep")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="99999-999" maskChar=""></InputMask>
                 </div>
                 <div className='flex flex-col'>
                     <label>Informações adicionais:</label>
@@ -124,29 +131,22 @@ export default function NewRunner({token}) {
                     </div>
                     {!isLowIncome ? <div></div> :
                          <div className='flex flex-col pt-[18px] pb-[25px]'>
-                            <label {...register("numberNIS")}>Informe seu número do NIS: </label>
-                            <input className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required/>
+                            <label>Informe seu número do NIS: </label>
+                            <InputMask {...register("numberNIS")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="99999999999" maskChar="" required></InputMask>
                         </div>
                     }
                 </div>
-                <div className='flex justify-center gap-10'>
-                    <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>
-                    <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>
-                    <span>{hasError}</span>
+                <div className='flex flex-col justify-center items-center'>
+                    <div className='flex gap-10'>
+                        <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>
+                        <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>
+                    </div>
+                    <div className={stylesRunner.messageError}>
+                        {hasError ? <><HiExclamationTriangle /><span className='text-center'>{hasError}</span></> : ''}
+                    </div>
                 </div>
             </form>
-        </main>
-        //     <input type='text' ></input>
-        //     <input type='text' {...register("cpf")}></input>
-        //     <input type='text' {...register("phone")}></input>
-        //     <input type='text' {...register("category")}></input>
-        //     <input type='text' {...register("bornDate")}></input>
-        //     <input type='text' {...register("gender")}></input>
-        //     <input type='text' {...register("cep")}></input>
-        //     <input type='text' {...register("pcd")}></input>
-        //     <input type='text' {...register("lowIncome")}></input>
-        //     <input type='submit'></input>
-        //     
+        </main>  
     )
 }
 

@@ -42,3 +42,11 @@
     background-color: #5d8e1c !important;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
+
+.messageError {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 10px;
+  }

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { HiLogout, HiUserAdd, HiUserCircle, HiCheck, HiCash } from "react-icons/hi";
-import { HiExclamationCircle } from 'react-icons/hi2';
+import { HiExclamationCircle, HiExclamationTriangle } from 'react-icons/hi2';
 import { Inter } from "next/font/google";
 import { destroyCookie, parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
+import { cpf } from 'cpf-cnpj-validator';
+import InputMask from 'react-input-mask';
 import axios from 'axios';
 
 import styles from '@/styles/Payment.module.css';
@@ -11,28 +13,17 @@ import { useForm } from "react-hook-form";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Payment({runners, token}){
+export default function Payment({runners, token, paymentValue}){
     const {register, handleSubmit} = useForm();
     const [paymentMethod, setPaymentMethod] = useState('');
-    const [paymentValue, setPaymentValue] = useState(0);
     const [cardNumber, setCardNumber] = useState('');
     const [cardName, setCardName] = useState('');
     const [cardValidity, setCardValidity] = useState('');
     const [cardCVV, setCardCVV] = useState('');
+    const [hasError, setHasError] = useState(null)
     
     const router = useRouter()
 
-    useEffect(() => {
-        runners.map(runner => {
-            if(runner.pcd || runner.lowIncome){
-                setPaymentValue(old => old.valueOf() + 0)
-            }else if(Number(((runner.bornDate).split('/'))[2]) <= 1963){
-                setPaymentValue(old => old.valueOf() + 50)
-            }else{
-                setPaymentValue(old => old.valueOf() + 100)
-            }
-        })
-    }, [])
     return(
         <main className={inter.className}>
             <nav className={`flex w-full items-center justify-between relative`}>
@@ -52,11 +43,17 @@ export default function Payment({runners, token}){
                 </div>
              :
              ''}
+            {hasError ?  <div className={styles.messageError}>
+                <HiExclamationTriangle /><span className='text-center'>{hasError}</span></div> : ''}
             <div className={`flex justify-center ${runners.length > 1 ? '' : 'pt-[50px]'}`}>
                 <form className='px-4 min-w-[500px]' onSubmit={handleSubmit((data) => {
-                    axios.post('/api/payment/confirm', data)
-                        .then(result => {console.log(result.data)})
-                        .catch(err => {console.log(err)})
+                    if(cpf.isValid(data.cpf)){
+                        axios.post('/api/payment/confirm', data)
+                            .then(result => {console.log(result.data)})
+                            .catch(err => {console.log(err)})
+                    }else{
+                        setHasError('CPF Inválido')
+                    }
                 })}>
                     <div className='flex flex-col'>
                         <label>Forma de pagamento:</label>
@@ -75,7 +72,7 @@ export default function Payment({runners, token}){
                     </div>
                     <div className='flex flex-col'>
                         <label>CPF:</label>
-                        <input {...register('cpf')} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                        <InputMask {...register("cpf")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="999.999.999-99" maskChar="" required></InputMask>
                     </div>
                     {/* DIV SE FOR POR CARTAO */}
                     {(paymentMethod == 'credito' || paymentMethod == 'debito') ? 
@@ -96,16 +93,16 @@ export default function Payment({runners, token}){
                             <div className='pl-4'>
                                 <div className='flex flex-col'>
                                     <label>Número do cartão:</label>
-                                    <input onChange={(e) => {setCardNumber(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                                    <InputMask {...register("cardNumber")} onChange={(e) => {setCardNumber(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="9999 9999 9999 9999" maskChar="" required></InputMask>
                                 </div>
                                 <div className='flex gap-3'>
                                     <div className='flex flex-col'>
                                         <label>CVV:</label>
-                                        <input onChange={(e) => {setCardCVV(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type="text" required></input>
+                                        <InputMask {...register("cardCVV")} onChange={(e) => {setCardCVV(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type="text" mask="999" maskChar="" required></InputMask>
                                     </div>
                                     <div className='flex flex-col'>
                                         <label>Validade:</label>
-                                        <input onChange={(e) => {setCardValidity(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type="text" required></input>
+                                        <InputMask {...register("cardValidity")} onChange={(e) => {setCardValidity(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type="text" mask="99/99" maskChar="" required></InputMask>
                                     </div>
                                 </div>
                             </div>
@@ -137,6 +134,8 @@ export default function Payment({runners, token}){
                             </div>
                         )}
                     </div>
+                    {/* Input referente ao valor */}
+                    <input {...register("paymentValue")} value={paymentValue} type="hidden"/>
                     <div>
                         <input value="Realizar Pagamento" className={styles.button} type="submit"/>
                     </div>
@@ -148,7 +147,7 @@ export default function Payment({runners, token}){
                     </div>
                     <div className='flex flex-col items-end'>
                         <span className='italic text-[22px] leading-[5px]'>Subtotal:</span>
-                        <span className='font-black text-[27px] italic'>R${paymentValue/2},00</span>
+                        <span className='font-black text-[27px] italic'>R${paymentValue},00</span>
                     </div>
                 </div>
             </div>
@@ -168,11 +167,22 @@ export async function getServerSideProps(ctx) {
     }
 
     const { data : runners } = await axios.post('/api/info/runnersPendingById', {id: token})
+    var paymentValue = 0
+    runners.map(runner => {
+        if(runner.pcd || runner.lowIncome){
+            paymentValue += 0
+        }else if(Number(((runner.bornDate).split('/'))[2]) <= 1963){
+            paymentValue += 50
+        }else{
+            paymentValue += 100
+        }
+    })
 
     return {
         props: {
             token,
-            runners
+            runners,
+            paymentValue
         }
     }
 }

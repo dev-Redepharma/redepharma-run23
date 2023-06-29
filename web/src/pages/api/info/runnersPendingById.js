@@ -10,7 +10,7 @@ export default async function RunnersById(req, res) {
       db.connect()
       try{
         const { id } = req.body;
-        const query = `SELECT * FROM runners WHERE authorId = ? and status = 'pendente'`;
+        const query = `SELECT * FROM runners WHERE authorId = ? and status = 'pendente' LIMIT 10`;
         const values = [id];
         const result = await db.execute(query, values);
         db.end();
