@@ -12,40 +12,48 @@ export default async function ConfirmPayAPI(req, res){
 
     db.connect()
 
-  const {name, cpf, paymentMethod, paymentValue, cardNumber, cardCVV, cardValidity, camisa0, camisa1, camisa2, camisa3, camisa4, camisa5, camisa6, camisa7, camisa8, camisa9} = req.body;
+  const {name, cpf, token, paymentMethod, paymentValue, cardNumber, cardCVV, cardValidity, camisa0, camisa1, camisa2, camisa3, camisa4, camisa5, camisa6, camisa7, camisa8, camisa9} = req.body;
    
   // Verificações se existem camisas
    const camisa = []
     if(camisa0){
-      camisa.push({id0: (camisa0.split('/'))[1], tamanho0: (camisa0.split('/'))[0]})
+      camisa.push({id: (camisa0.split('/'))[1], tamanho: (camisa0.split('/'))[0]})
     }
     if(camisa1){
-      camisa.push({id1: (camisa1.split('/'))[1], tamanho1: (camisa1.split('/'))[0]})
+      camisa.push({id: (camisa1.split('/'))[1], tamanho: (camisa1.split('/'))[0]})
     }
     if(camisa2){
-      camisa.push({id2: (camisa2.split('/'))[1], tamanho2: (camisa2.split('/'))[0]})
+      camisa.push({id: (camisa2.split('/'))[1], tamanho: (camisa2.split('/'))[0]})
     }
     if(camisa3){
-      camisa.push({id3: (camisa3.split('/'))[1], tamanho3: (camisa3.split('/'))[0]})
+      camisa.push({id: (camisa3.split('/'))[1], tamanho: (camisa3.split('/'))[0]})
     }
     if(camisa4){
-      camisa.push({id4: (camisa4.split('/'))[1], tamanho4: (camisa4.split('/'))[0]})
+      camisa.push({id: (camisa4.split('/'))[1], tamanho: (camisa4.split('/'))[0]})
     }
     if(camisa5){
-      camisa.push({id5: (camisa5.split('/'))[1], tamanho5: (camisa5.split('/'))[0]})
+      camisa.push({id: (camisa5.split('/'))[1], tamanho: (camisa5.split('/'))[0]})
     }
     if(camisa6){
-      camisa.push({id6: (camisa6.split('/'))[1], tamanho6: (camisa6.split('/'))[0]})
+      camisa.push({id: (camisa6.split('/'))[1], tamanho: (camisa6.split('/'))[0]})
     }
     if(camisa7){
-      camisa.push({id7: (camisa7.split('/'))[1], tamanho7: (camisa7.split('/'))[0]})
+      camisa.push({id: (camisa7.split('/'))[1], tamanho: (camisa7.split('/'))[0]})
     }
     if(camisa8){
-      camisa.push({id8: (camisa8.split('/'))[1], tamanho8: (camisa8.split('/'))[0]})
+      camisa.push({id: (camisa8.split('/'))[1], tamanho: (camisa8.split('/'))[0]})
     }
     if(camisa9){
-      camisa.push({id9: (camisa9.split('/'))[1], tamanho9: (camisa9.split('/'))[0]})
+      camisa.push({id: (camisa9.split('/'))[1], tamanho: (camisa9.split('/'))[0]})
     }
+
+    const queryMoreInfo = `SELECT * FROM accounts WHERE id = ?`;
+    const valuesMoreInfo = [token];
+    const moreInfo = await db.execute(queryMoreInfo, valuesMoreInfo)
+
+    const queryFirstRunner = `SELECT * FROM runners WHERE id = ?`;
+    const valuesFirstRunner = [(camisa0.split('/'))[1]]
+    const firstRunner = await db.execute(queryFirstRunner, valuesFirstRunner);
 
     if(paymentMethod == 'pix') {
       axios.post('https://api.pagar.me/core/v5/orders/', {
@@ -53,13 +61,13 @@ export default async function ConfirmPayAPI(req, res){
               "phones": {
                   "mobile_phone": {
                         "country_code": "55",
-                        "area_code": "83",
-                        "number": "993818054"
+                        "area_code": (firstRunner[0][0].phone).substring(0, 2),
+                        "number": "9"+((firstRunner[0][0].phone).substring(5)).replaceAll('-', '')
                   }
               },
               "name": name,
               "type": "individual",
-              "email": "kcaiosouza@gmail.com",
+              "email": moreInfo[0][0].email,
               "gender": "male",
               "document": (cpf.replaceAll('.', '')).replaceAll('-', '')
         },
@@ -85,16 +93,15 @@ export default async function ConfirmPayAPI(req, res){
       }
       })
       .then(async result => {
-        const queryPix = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?)`
-        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, camisa]
+        const queryPix = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?)`
+        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at]
         await db.execute(queryPix, valuesPix)
+        db.end()
         res.status(200).send(result.data)
-        return
       })
       .catch(err => {
         res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento.", err})
       })
     }
 
-    db.end()
 }

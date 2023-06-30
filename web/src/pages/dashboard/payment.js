@@ -1,18 +1,32 @@
 import { useState, useEffect } from "react";
-import { HiLogout, HiUserAdd, HiUserCircle, HiCheck, HiCash } from "react-icons/hi";
+import { HiLogout, HiUserAdd, HiUserCircle, HiCheck, HiCash, HiX } from "react-icons/hi";
 import { HiExclamationCircle, HiExclamationTriangle } from 'react-icons/hi2';
 import { Inter } from "next/font/google";
 import { destroyCookie, parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
 import { cpf } from 'cpf-cnpj-validator';
+import { InfinitySpin } from  'react-loader-spinner'
 import InputMask from 'react-input-mask';
 import axios from 'axios';
+import Modal from "react-modal";
 
 import styles from '@/styles/Payment.module.css';
 import { useForm } from "react-hook-form";
 
 const inter = Inter({ subsets: ['latin'] })
 
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+
+  Modal.setAppElement('#__next');
 export default function Payment({runners, token, paymentValue}){
     const {register, handleSubmit} = useForm();
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -20,9 +34,20 @@ export default function Payment({runners, token, paymentValue}){
     const [cardName, setCardName] = useState('');
     const [cardValidity, setCardValidity] = useState('');
     const [cardCVV, setCardCVV] = useState('');
-    const [hasError, setHasError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false);
+    const [imgPix, setImgPix] = useState('');
+    const [codePix, setCodePix] = useState('');
+    const [hasError, setHasError] = useState(null);
+    const [modalIsOpen, setIsOpen] = useState(false);
     
     const router = useRouter()
+    
+    function openModal() {
+        setIsOpen(true);
+    }
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     return(
         <main className={inter.className}>
@@ -48,9 +73,37 @@ export default function Payment({runners, token, paymentValue}){
             <div className={`flex justify-center ${runners.length > 1 ? '' : 'pt-[50px]'}`}>
                 <form className='px-4 min-w-[500px]' onSubmit={handleSubmit((data) => {
                     if(cpf.isValid(data.cpf)){
-                        axios.post('/api/payment/confirm', data)
-                            .then(result => {console.log(result.data)})
-                            .catch(err => {console.log(err)})
+                        setIsLoading(true)
+                        openModal()
+                        axios.post('/api/payment/confirm', {...data, token})
+                            .then(result => {
+                                if(result.data.status == false){
+                                    setIsLoading(false)
+                                    closeModal()
+                                    setHasError("Ocorreu um erro, tente novamente.")
+                                    return
+                                }
+                                setImgPix(result?.data?.charges[0]?.last_transaction?.qr_code_url)
+                                setCodePix(result?.data?.charges[0]?.last_transaction?.qr_code)
+
+                                var checkPayment = setInterval(() => {
+                                    axios.post('/api/payment/check', {id: result.data?.charges[0]?.id})
+                                    .then(resul => {
+                                        if(resul.data?.status == "paid"){
+                                            axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status})
+                                            .then(() => {clearInterval(checkPayment); router.push('/dashboard')})
+                                            .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                        }
+                                    })
+                                    .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                }, 5000)
+                            })
+                            .catch(err => {
+                                setHasError("Ocorreu um erro, tente novamente.")
+                                console.log(err)
+                                setIsLoading(false)
+                                closeModal()
+                            })
                     }else{
                         setHasError('CPF Inválido')
                     }
@@ -136,9 +189,16 @@ export default function Payment({runners, token, paymentValue}){
                     </div>
                     {/* Input referente ao valor */}
                     <input {...register("paymentValue")} value={paymentValue} type="hidden"/>
+                    {/* BOTAO DE PAGAMENTO */}
+                    {isLoading ? 
+                    <div className="w-full flex items-center justify-center">
+                        <InfinitySpin width="150" color="#6CA721"/>
+                    </div>
+                    :
                     <div>
                         <input value="Realizar Pagamento" className={styles.button} type="submit"/>
                     </div>
+                    }
                 </form>
                 <div className='bg-white flex flex-col rounded-[20px] p-4 justify-between'>
                     <h1 className='italic font-bold text-[20px]'>Resumo do pagamento</h1>
@@ -151,6 +211,26 @@ export default function Payment({runners, token, paymentValue}){
                     </div>
                 </div>
             </div>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                style={customStyles}
+                contentLabel="ModalPix"
+            >
+                <div className="flex justify-between items-center">
+                    <h2 className="text-[24px] font-bold italic">Quase lá!</h2>
+                    <HiX onClick={closeModal} size={25} className="cursor-pointer transition text-[rgba(0,0,0,0.5)] hover:text-[rgba(0,0,0,1)]"/>
+                </div>
+                <div className="flex mt-5 flex-col justify-center items-center">
+                    <span>Para finalizar o pagamento, basta ler o QR-Code</span>
+                    {imgPix ? <img src={imgPix} width={200}/> : <div className={styles.skeletonLoadingPix} />}
+                    <span>ou copiar a chave a baixo:</span>
+                    {codePix ? <textarea value={codePix} className="resize-none w-full h-[100px] bg-[rgba(0,0,0,0.07) border-[2px] border-[#000]"/> : <div className={styles.skeletonLoadingCode}/>}
+                    {codePix ? <div onClick={() => {
+                        navigator.clipboard.writeText(codePix)
+                    }} className={`items-center justify-center flex mt-5 ${styles.button}`}>Copiar</div> : ''}
+                </div>
+            </Modal>
         </main>
     )
 }

@@ -50,3 +50,45 @@
     gap: 7px;
     margin-top: 10px;
   }
+
+.skeletonLoadingPix {
+    background-color: rgb(218, 218, 218);
+    background-image: linear-gradient(90deg, rgb(218, 218, 218), rgb(235, 235, 235), rgb(218, 218, 218));
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+
+    animation: 1.2s ease-in-out 0s infinite normal none running animationSKLTPix;
+    width: 200px;
+    height: 200px;
+}
+
+@keyframes animationSKLTPix {
+    0% {
+        background-position: -200px 0px;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0px;
+    }
+}
+
+.skeletonLoadingCode {
+    background-color: rgb(218, 218, 218);
+    background-image: linear-gradient(90deg, rgb(218, 218, 218), rgb(235, 235, 235), rgb(218, 218, 218));
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+
+    animation: 1.2s ease-in-out 0s infinite normal none running animationSKLTPix;
+    width: 300px;
+    height: 100px;
+}
+
+@keyframes animationSKLTPix {
+    0% {
+        background-position: -200px 0px;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0px;
+    }
+}
