@@ -45,3 +45,25 @@
 .buttonStatusRunner:hover{
     background-color: rgba(0, 0, 0, 0.2);
 }
+
+.tabelaInfo td, .tabelaInfo th {
+	border: 1px solid #ddd;
+	padding: 8px;
+    text-align: center;
+}
+  
+.tabelaInfo tr:nth-child(even){background-color: #f2f2f2;}
+  
+.tabelaInfo tr:hover {background-color: #ddd;}
+  
+.tabelaInfo th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
+	color: white;
+}
+
+.tabelaInfo th:nth-child(even) {
+	background: linear-gradient(90deg, #840D3B 0%, #E94E1B 100%);
+}

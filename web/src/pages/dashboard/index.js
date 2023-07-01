@@ -73,7 +73,7 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                         
                         {/* VERIFICA SE ESSA PESSOA JÁ PAGOU */}
                         {runner.status == 'confirmado' ? 
-                        <div className={`${styles.buttonStatusRunner} flex items-center gap-4 cursor-pointer`}>
+                        <div onClick={() => {router.push(`/dashboard/confirm/${runner.id}`)}} className={`${styles.buttonStatusRunner} flex items-center gap-4 cursor-pointer`}>
                             <HiPrinter size={25}></HiPrinter>
                             <span>Imprimir cartão de confirmação</span>
                         </div>
