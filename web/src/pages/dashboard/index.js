@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
 import { destroyCookie, parseCookies } from "nookies";
-import { HiClock, HiCheckCircle, HiExclamationCircle, HiPrinter } from "react-icons/hi2"
+import { HiClock, HiCheckCircle, HiExclamationCircle, HiPrinter, HiXCircle } from "react-icons/hi2"
 import { HiLogout, HiUserAdd, HiUserCircle, HiCash, HiX } from "react-icons/hi";
 import { Inter } from "next/font/google";
 import axios from "axios";
@@ -66,9 +66,11 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                             {runner.status == 'confirmado' ? <HiCheckCircle size={25} /> : ''}
                             {runner.status == 'pendente' ? <HiExclamationCircle size={25} /> : ''}
                             {runner.status == 'analise' ? <HiClock size={25} /> : ''}
+                            {runner.status == 'negado' ? <HiXCircle size={25} /> : ''}
                             {runner.status == 'confirmado' ? <span>Pagamento Confirmado</span> : ''}
                             {runner.status == 'pendente' ? <span>Pagamento Pendente</span> : ''}
                             {runner.status == 'analise' ? <span>Em Análise</span> : ''}
+                            {runner.status == 'negado' ? <span>Negado</span> : ''}
                         </div>
                         
                         {/* VERIFICA SE ESSA PESSOA JÁ PAGOU */}

@@ -13,6 +13,8 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "cpf-cnpj-validator": "^1.0.3",
+    "date-and-time": "^3.0.2",
+    "firebase": "^9.23.0",
     "mysql2": "^3.4.0",
     "next": "13.4.6",
     "nookies": "^2.5.2",

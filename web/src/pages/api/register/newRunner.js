@@ -1,5 +1,4 @@
 import mysql from 'mysql2/promise';
-import {v4} from 'uuid';
 
 export default async function NewRunnerAPI(req, res){
     const db = await mysql.createConnection({
@@ -11,9 +10,10 @@ export default async function NewRunnerAPI(req, res){
 
     db.connect()
 
-  const {token, name, cpf, phone, category, bornDate, gender, cep, pcd, lowIncome} = req.body;
+  const {id, token, name, cpf, phone, category, bornDate, gender, cep, pcd, lowIncome, numberNIS} = req.body;
 
   const status = pcd ? 'analise' : lowIncome ? 'analise' : 'pendente'
+  const nis = numberNIS ? numberNIS : null
 
   const queryzinha = `SELECT * FROM runners WHERE cpf = ?`
   const valuezinho = [cpf]
@@ -22,8 +22,8 @@ export default async function NewRunnerAPI(req, res){
   if((resultzinho[0]).length != 0){
     res.status(200).send({status: false, message: "Esse CPF já foi cadastrado."})
   }else{
-    const query = `INSERT INTO runners (id, authorId, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
-    const values = [token, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome];
+    const query = `INSERT INTO runners (id, authorId, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome, nis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+    const values = [id, token, name, cpf, phone, category, bornDate, gender, cep, status, pcd, lowIncome, nis];
     await db.execute(query, values)
       .then(() => {
         db.end();

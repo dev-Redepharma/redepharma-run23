@@ -112,11 +112,36 @@ export default function Payment({runners, token, paymentValue}){
                             .then(result => {
                                 if(result.data.status == false){
                                     setIsLoading(false)
-                                    closeModal()
                                     setHasError(result.data.message)
                                     return
                                 }
                                 router.push('/dashboard')
+                            })
+                        }
+                        if(data.paymentMethod == 'credito'){
+                            setIsLoading(true)
+                            axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
+                            .then(result => {
+                                console.log("FOI")
+                                axios.post('/api/payment/confirm', {...data, token, cep: result.data})
+                                .then(resultinho => {
+                                    if(resultinho.data.status == false){
+                                        setIsLoading(false)
+                                        setHasError(resultinho.data.message)
+                                        return
+                                    }
+                                    router.push('/dashboard')
+                                })
+                                .catch(err => {
+                                    setIsLoading(false)
+                                    console.log(err)
+                                    setHasError("Ocorreu um erro, tente novamente!")
+                                })
+                            })
+                            .catch(err => {
+                                setIsLoading(false)
+                                setHasError("CEP não localizado")
+                                console.log(err)
                             })
                         }
                     }else{
@@ -129,8 +154,6 @@ export default function Payment({runners, token, paymentValue}){
                             <option value=''></option>
                             <option value='pix'>PIX</option>
                             <option value='credito'>Cartão de Crédito</option>
-                            <option value='debito'>Cartão de Débito</option>
-                            <option value='boleto'>Boleto</option>
                             <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option>
                         </select>
                     </div>
@@ -187,6 +210,37 @@ export default function Payment({runners, token, paymentValue}){
                         </div>
                         :
                         ''
+                    }
+
+                    {/* CEP - Com validação */}
+                    {paymentMethod == 'credito'? 
+                        <>
+                        <div className='flex flex-col'>
+                            <label>CEP:</label>
+                            <input {...register("CEP")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='number' required></input>
+                        </div>
+                        <div className='flex flex-col'>
+                            <label>Número da residência:</label>
+                            <input {...register("numeroCasa")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                        </div>
+                        </>
+                        :
+                        ''  
+                    }
+
+
+                    {/* QUANTAS VEZES VAI SER PARCELADO */}
+                    {(paymentMethod == 'credito') ? 
+                        <div className='flex flex-col'>
+                            <label>Parcelas:</label>
+                            <select {...register("parcelas")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required>
+                                <option value={1}>1x - R${paymentValue},00</option>
+                                {runners.length > 1 ? <option value={2}>2x - R${Number(paymentValue)/2},00</option> : ''}
+                                {runners.length > 3 ? <option value={3}>3x - R${Number(paymentValue)/3},00</option> : ''}
+                            </select>
+                        </div>
+                        :
+                        ''  
                     }
                     <div>
                         <label>Tamanho Camisa:</label>

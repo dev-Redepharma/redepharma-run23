@@ -146,4 +146,8 @@ export default async function ConfirmPayAPI(req, res){
         res.status(200).send({status: false, message: "Voucher inválido ou já utilizado"})
       }
     }
+
+    if(paymentMethod == 'credito') {
+      console.log(req.body)
+    }
 }

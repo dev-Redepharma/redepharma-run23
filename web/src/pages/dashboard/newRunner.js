@@ -1,24 +1,33 @@
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { parseCookies, destroyCookie } from 'nookies';
 import { HiLogout } from 'react-icons/hi';
 import { HiExclamationTriangle } from 'react-icons/hi2';
 import { Inter } from 'next/font/google';
+import { cpf } from 'cpf-cnpj-validator';
+import { v4 } from 'uuid';
+import { storage } from '@/services/firebase'
+import { ref, uploadBytes } from 'firebase/storage';
 import InputMask from 'react-input-mask';
 import axios from 'axios'
+import { date } from 'date-and-time'
+import { InfinitySpin } from 'react-loader-spinner';
 
 import styles from '@/styles/Dashboard.module.css'
 import stylesRunner from '@/styles/NewRunner.module.css'
-import { cpf } from 'cpf-cnpj-validator';
 const inter = Inter({ subsets: ['latin'] })
 
-export default function NewRunner({token}) {
+export default function NewRunner({token, id}) {
     const {register, handleSubmit} = useForm()
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(null)
     const [isPCD, setIsPCD] = useState(false)
     const [isLowIncome, setisLowIncome] = useState(false)
+    const [messageFirebaseUpload, setMessageFirebaseUpload] = useState()
+    const [uploadingFB, setUploadingFB] = useState(false);
+    const [isOldAge, setisOldAge] = useState(false)
+    const [age, setAge] = useState([])
 
     const router = useRouter()
 
@@ -28,6 +37,15 @@ export default function NewRunner({token}) {
 
     function handleChangeLowIncome(){
         setisLowIncome(!isLowIncome)
+    }
+
+    function uploadToFirebase(value) {
+        setUploadingFB(true)
+        const DocumentRef = ref(storage, `documents/${"Document_"+id}`)
+            uploadBytes(DocumentRef, value).then((e) => {
+                setMessageFirebaseUpload("Documento enviado!");
+                setUploadingFB(false)
+        })
     }
 
     return (
@@ -47,6 +65,7 @@ export default function NewRunner({token}) {
             <form className='py-[50px] px-[80px]' onSubmit={handleSubmit((data =>{
                 if(cpf.isValid(data.cpf)){
                     axios.post('/api/register/newRunner', {
+                        id: id,
                         name: data.name,
                         cpf: data.cpf,
                         phone: data.phone,
@@ -56,7 +75,8 @@ export default function NewRunner({token}) {
                         pcd: data.pcd,
                         category: data.category,
                         lowIncome: data.lowIncome,
-                        token: token
+                        token: token,
+                        numberNIS: data.numberNIS
                     })
                         .then(result => {
                             setIsLoading(false)
@@ -99,8 +119,20 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col'>
                     <label>Data de nascimento:</label>
-                    <InputMask {...register("bornDate")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="99/99/9999" maskChar="" required></InputMask>
+                    <InputMask {...register("bornDate")} title='Digite no seguinte padrão DD/MM/AAAA' pattern='^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/(19\d\d|20[0-2]\d|2023)$' className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="99/99/9999" maskChar="" onChange={(e) => {
+                        setAge(e.target.value.split('/'))
+                    }} required></InputMask>
                 </div>
+                {2023 - age[2] >= 60 && age[2].length == 4 && !isPCD ? 
+                    <>
+                        <div className='flex flex-col pt-[18px] pb-[25px]'>
+                            <label {...register("attachmentPCD")}>Selecione o comprovante PCD: </label>
+                            <input type='file' onChange={(e)=>{
+                                uploadToFirebase(e.target.files[0])}} required/>
+                        </div>
+                        <div className='flex text-center'>{messageFirebaseUpload}</div>
+                    </>
+                : ''}
                 <div className='flex flex-col'>
                     <label>Gênero:</label>
                     <select {...register("gender")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required>
@@ -120,10 +152,14 @@ export default function NewRunner({token}) {
                         <span>PCD - Pessoa Com Deficiência</span>
                     </div>
                     {!isPCD ? <div></div> :
-                         <div className='flex flex-col pt-[18px] pb-[25px]'>
-                            <label {...register("attachmentPCD")}>Selecione o comprovante PCD: </label>
-                            <input type='file' required/>
-                        </div>
+                        <>
+                            <div className='flex flex-col pt-[18px] pb-[25px]'>
+                                <label {...register("attachmentPCD")}>Selecione a identidade: </label>
+                                <input type='file' onChange={(e)=>{
+                                    uploadToFirebase(e.target.files[0])}} required/>
+                            </div>
+                            <div className='flex text-center'>{messageFirebaseUpload}</div>
+                        </>
                     }
                     <div className='flex items-center gap-2'>
                         <input {...register("lowIncome")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='checkbox' onChange={handleChangeLowIncome}></input>
@@ -138,8 +174,9 @@ export default function NewRunner({token}) {
                 </div>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='flex gap-10'>
-                        <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>
-                        <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>
+                        {uploadingFB ? '' : <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>}
+                        {uploadingFB ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>}
+                        
                     </div>
                     <div className={stylesRunner.messageError}>
                         {hasError ? <><HiExclamationTriangle /><span className='text-center'>{hasError}</span></> : ''}
@@ -161,7 +198,9 @@ export async function getServerSideProps(ctx) {
         }
     }
 
+    const id = v4()
+
     return {
-        props: {token}
+        props: {token, id}
     }
 }
