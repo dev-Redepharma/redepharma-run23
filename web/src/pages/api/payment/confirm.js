@@ -12,7 +12,27 @@ export default async function ConfirmPayAPI(req, res){
 
     db.connect()
 
-  const {name, cpf, token, paymentMethod, paymentValue, cardNumber, cardCVV, cardValidity, camisa0, camisa1, camisa2, camisa3, camisa4, camisa5, camisa6, camisa7, camisa8, camisa9} = req.body;
+  const {
+    name,
+    cpf,
+    token,
+    paymentMethod,
+    paymentValue,
+    voucher,
+    cardNumber,
+    cardCVV,
+    cardValidity,
+    camisa0,
+    camisa1,
+    camisa2,
+    camisa3,
+    camisa4,
+    camisa5,
+    camisa6,
+    camisa7,
+    camisa8,
+    camisa9
+  } = req.body;
    
   // Verificações se existem camisas
    const camisa = []
@@ -100,8 +120,30 @@ export default async function ConfirmPayAPI(req, res){
         res.status(200).send(result.data)
       })
       .catch(err => {
+        db.end()
         res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento.", err})
       })
     }
 
+    if(paymentMethod == 'voucher') {
+      const queryGetVoucher = `SELECT * FROM vouchers WHERE voucher = ? AND usado != 'true'`;
+      const valuesGetVoucher = [voucher];
+      const resultGetVoucher = await db.execute(queryGetVoucher, valuesGetVoucher);
+      
+      if((resultGetVoucher[0]).length !== 0) {
+        camisa.map(runner => {
+          const queryUpdateVoucherRunner = `UPDATE runners SET status = 'confirmado', shirtSize = ? WHERE id = ?`;
+          const valueUpdateVoucherRunner = [runner.tamanho, runner.id];
+          db.execute(queryUpdateVoucherRunner, valueUpdateVoucherRunner);
+          const queryUseVoucher = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE id = ?`;
+          const valuesUseVoucher = [name, cpf, resultGetVoucher[0][0].id];
+          db.execute(queryUseVoucher, valuesUseVoucher);
+          db.end()
+          res.status(200).send({status: true, message: "Voucher aplicado com sucesso"})
+        })
+      }else{
+        db.end()
+        res.status(200).send({status: false, message: "Voucher inválido ou já utilizado"})
+      }
+    }
 }

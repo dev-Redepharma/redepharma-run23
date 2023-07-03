@@ -73,37 +73,52 @@ export default function Payment({runners, token, paymentValue}){
             <div className={`flex justify-center ${runners.length > 1 ? '' : 'pt-[50px]'}`}>
                 <form className='px-4 min-w-[500px]' onSubmit={handleSubmit((data) => {
                     if(cpf.isValid(data.cpf)){
-                        setIsLoading(true)
-                        openModal()
-                        axios.post('/api/payment/confirm', {...data, token})
+                        if(data.paymentMethod == 'pix'){
+                            setIsLoading(true)
+                            openModal()
+                            axios.post('/api/payment/confirm', {...data, token})
+                                .then(result => {
+                                    if(result.data.status == false){
+                                        setIsLoading(false)
+                                        closeModal()
+                                        setHasError("Ocorreu um erro, tente novamente.")
+                                        return
+                                    }
+                                    setImgPix(result?.data?.charges[0]?.last_transaction?.qr_code_url)
+                                    setCodePix(result?.data?.charges[0]?.last_transaction?.qr_code)
+    
+                                    var checkPayment = setInterval(() => {
+                                        axios.post('/api/payment/check', {id: result.data?.charges[0]?.id})
+                                        .then(resul => {
+                                            if(resul.data?.status == "paid"){
+                                                axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status})
+                                                .then(() => {clearInterval(checkPayment); router.push('/dashboard')})
+                                                .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                            }
+                                        })
+                                        .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                    }, 5000)
+                                })
+                                .catch(err => {
+                                    setHasError("Ocorreu um erro, tente novamente.")
+                                    console.log(err)
+                                    setIsLoading(false)
+                                    closeModal()
+                                })
+                        }
+                        if(data.paymentMethod == 'voucher'){
+                            setIsLoading(true)
+                            axios.post('/api/payment/confirm', {...data, token})
                             .then(result => {
                                 if(result.data.status == false){
                                     setIsLoading(false)
                                     closeModal()
-                                    setHasError("Ocorreu um erro, tente novamente.")
+                                    setHasError(result.data.message)
                                     return
                                 }
-                                setImgPix(result?.data?.charges[0]?.last_transaction?.qr_code_url)
-                                setCodePix(result?.data?.charges[0]?.last_transaction?.qr_code)
-
-                                var checkPayment = setInterval(() => {
-                                    axios.post('/api/payment/check', {id: result.data?.charges[0]?.id})
-                                    .then(resul => {
-                                        if(resul.data?.status == "paid"){
-                                            axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status})
-                                            .then(() => {clearInterval(checkPayment); router.push('/dashboard')})
-                                            .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
-                                        }
-                                    })
-                                    .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
-                                }, 5000)
+                                router.push('/dashboard')
                             })
-                            .catch(err => {
-                                setHasError("Ocorreu um erro, tente novamente.")
-                                console.log(err)
-                                setIsLoading(false)
-                                closeModal()
-                            })
+                        }
                     }else{
                         setHasError('CPF Inválido')
                     }
@@ -159,6 +174,16 @@ export default function Payment({runners, token, paymentValue}){
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        :
+                        ''
+                    }
+
+                    {/* DIV SE FOR POR VOUCHER */}
+                    {(paymentMethod == 'voucher') ? 
+                        <div className='flex flex-col'>
+                            <label>Voucher:</label>
+                            <input {...register("voucher")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
                         </div>
                         :
                         ''
@@ -257,6 +282,15 @@ export async function getServerSideProps(ctx) {
             paymentValue += 100
         }
     })
+
+    if(runners.length == 0){
+        return {
+            redirect: {
+                destination: '/dashboard',
+                permanent: false,
+            }
+        }
+    }
 
     return {
         props: {
