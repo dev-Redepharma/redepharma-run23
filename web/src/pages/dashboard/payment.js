@@ -123,11 +123,14 @@ export default function Payment({runners, token, paymentValue}){
                             axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
                             .then(result => {
                                 console.log("FOI")
-                                axios.post('/api/payment/confirm', {...data, token, cep: result.data})
+                                axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
                                 .then(resultinho => {
                                     if(resultinho.data.status == false){
                                         setIsLoading(false)
                                         setHasError(resultinho.data.message)
+                                        if(resultinho.data.tipo == 'processing'){
+                                            setIsLoading(true)
+                                        }
                                         return
                                     }
                                     router.push('/dashboard')

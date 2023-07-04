@@ -22,6 +22,9 @@ export default async function ConfirmPayAPI(req, res){
     cardNumber,
     cardCVV,
     cardValidity,
+    numeroCasa,
+    parcelas,
+    houseinfo,
     camisa0,
     camisa1,
     camisa2,
@@ -148,6 +151,79 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'credito') {
-      console.log(req.body)
+      axios.post('https://api.pagar.me/core/v5/orders/', {
+        "items": [
+          {
+              "amount": Number(paymentValue + '00'),
+              "code": "RRUN2023",
+              "description": "Circuito Redepharma RUN 2023",
+              "quantity": 1
+          }
+      ],
+      "customer": {
+          "name": name,
+          "email": moreInfo[0][0].email
+      },
+      "payments": [
+          {
+              "payment_method": "credit_card",
+              "credit_card": {
+                  "recurrence": false,
+                  "installments": Number(parcelas),
+                  "statement_descriptor": "RUN 23",
+                  "card": {
+                      "number": cardNumber.replaceAll(' ', ''),
+                      "holder_name": name,
+                      "exp_month": Number(cardValidity.split('/')[0]),
+                      "exp_year": Number(cardValidity.split('/')[1]),
+                      "cvv": String(cardCVV),
+                      "billing_address": {
+                          "line_1": `${houseinfo.street}, ${numeroCasa}`,
+                          "zip_code": String(houseinfo.cep),
+                          "city": houseinfo.city,
+                          "state": houseinfo.state,
+                          "country": "BR"                
+                      }
+                  }
+              }
+          }
+      ]
+     }, {
+      headers: {
+          "Authorization": `Basic ${process.env.PAGARME_KEY}`,
+          "Content-Type": "application/json"
+      }
+      })
+      .then(async result => {
+        const queryCredito = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?)`
+        const valuesCredito = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at]
+        await db.execute(queryCredito, valuesCredito)
+        db.end()
+
+        if(result.data.status == 'paid'){
+          axios.post('/api/info/updateRunner', {chargeId: result.data.charges[0].id, status: 'paid'})
+          .then(resul => {
+            res.status(200).send({status: true, message: "Pagamento autorizado"})
+          })
+          .catch(err => {
+            res.status(200).send({status: false, message: "Não foi possível atualizar o status do seu pagamento, não se preocupe, em até 30 minutos confirmaremos para você!"})
+          })
+        }
+
+        if(result.data.status == 'failed'){
+          res.status(200).send({status: false, message: "Falha no pagamento, verifique seus dados e tente novamente", tipo: 'failed'})
+        }
+
+        if(result.data.status == 'processing'){
+          res.status(200).send({status: false, message: "Seu pagamento está sendo processado, em até 30 minutos confirmaremos para você. Aguarde!", tipo: 'processing'})
+        }
+      })
+      .catch(err => {
+        if(err.message == 'The request is invalid.') {
+          res.status(200).send({status: false, message: "Solicitação de pagamento inválida, revise seus dados de pagamento e tente novamente"})
+        }else{
+          res.status(200).send({status: false, message: "Erro desconhecido, verifique seus dados e tente novamente."})
+        }
+      })
     }
 }
