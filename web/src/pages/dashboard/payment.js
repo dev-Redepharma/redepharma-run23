@@ -53,7 +53,9 @@ export default function Payment({runners, token, paymentValue}){
         <main className={inter.className}>
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
-                    <img src="/RunBlack.png"/>
+                    <img className="cursor-pointer" src="/RunBlack.png" onClick={() => {
+                        router.push('/dashboard')
+                    }}/>
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
                         <span className="text-[17px] font-bold italic">Sair</span>
                         <HiLogout></HiLogout>  
@@ -122,7 +124,6 @@ export default function Payment({runners, token, paymentValue}){
                             setIsLoading(true)
                             axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
                             .then(result => {
-                                console.log("FOI")
                                 axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
                                 .then(resultinho => {
                                     if(resultinho.data.status == false){

@@ -96,6 +96,9 @@ export default function Subscribe() {
                                     </div>
                                 </div>
                             </form>
+                            <div className={`${styles.boxChange} flex justify-center`} onClick={() => router.push('/login')}>
+                                <span>Já Possuo Conta</span>
+                            </div>
                         </div>
                         <img src="/woman-isticandolse.png"/>
                     </div>

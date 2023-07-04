@@ -3,12 +3,15 @@ import Marquee from 'react-fast-marquee';
 import { Inter } from 'next/font/google'
 import { HiPhone, HiMapPin } from 'react-icons/hi2'
 import { HiAtSymbol } from 'react-icons/hi'
+import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ['latin'] })
 
 import styles from '@/styles/Index.module.css'
 
 export default function Home() {
+  const router = useRouter()
+
   return (
     <main
       className={`${styles.container} ${inter.className}`}
@@ -19,13 +22,13 @@ export default function Home() {
           <a href='#sobre'>SOBRE</a>
           <a href='#percursos'>PERCURSO</a>
           <a href='#kit'>KIT ATLETA</a>
-          <a href='/'>INSCREVA-SE</a>
+          <a href='/subscribe'>INSCREVA-SE</a>
         </div>
       </nav>
       <header className={styles.header}>
         <div className={styles.sectionMain}>
           <img src='bigLogo.png' alt='LogoRun2023'/>
-          <div className={styles.btnInscrever}>INSCREVA-SE</div>
+          <div className={styles.btnInscrever} onClick={() => router.push('/subscribe')}>INSCREVA-SE</div>
         </div>
         <img className={styles.runner} src='woman-running.png' alt='Corredora'/>
       </header>
@@ -38,17 +41,16 @@ export default function Home() {
       </div>
       <Marquee pauseOnHover={true} speed={70} gradientColor={[230, 233, 242]} className={styles.patrocinadores}>
         <div className={styles.providers} id="sobre">
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
-            <img src='sandoz.png' alt='sandoz o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
+            <img src='mink.png' alt='mink o patrocinador'/>
         </div>
       </Marquee>
       <div className={styles.aboutSection}>

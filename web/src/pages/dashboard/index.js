@@ -100,7 +100,9 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                 {pendingPayment ? 
                     <div className={`flex justify-between ${analisingRunner ? '' : 'py-[45px]'}`}>
                         <p>Resta o pagamento de {pendingPayment} pessoa(s). <br/>Garanta a inscrição, realize o pagamento.</p>
-                        <div className={`flex items-center gap-2 ${styles.button}`}>
+                        <div className={`flex items-center gap-2 ${styles.button}`} onClick={() => {
+                            router.push('/dashboard/payment')
+                        }}>
                             <HiCash size={25}></HiCash>
                             <span>Pagar Agora</span>
                         </div>
