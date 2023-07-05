@@ -9,6 +9,7 @@ import Modal from 'react-modal';
 import { HiAtSymbol, HiLockClosed } from 'react-icons/hi';
 import { HiExclamationTriangle } from 'react-icons/hi2';
 import axios from 'axios'
+import { InfinitySpin } from 'react-loader-spinner';
 
 import styles from '@/styles/Login.module.css'
 
@@ -33,6 +34,8 @@ export default function Login() {
     const [hasError, setHasError] = useState('')
     const { setLogin } = useContext(AuthContext)
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const [isSending, setIsSending] = useState(false);
 
     function openModal() {
         setIsOpen(true);
@@ -124,10 +127,39 @@ export default function Login() {
                                 style={customStyles}
                                 contentLabel="Example Modal"
                             >
-                                <form className='flex flex-col w-[65vh] '>
+                                <form className='flex flex-col w-[65vh] ' onSubmit={handleSubmit((data) => {
+                                    setIsSending(true)
+                                    axios.post('/api/info/searchEmail', data)
+                                    .then(result => {
+                                        if(result.data.status == true){
+                                            axios.get(`https://inventario.redepharma.com.br/sendEmail.php?email=${data.email}&id=${result.data.uuid}`).then((resul) =>{
+                                            if(resul.data == 'FOI'){
+                                                setMessage('Email enviado com sucesso!')
+                                                setIsSending(false)
+                                            }else{
+                                                setMessage('Erro ao enviar o email')
+                                                setIsSending(false)
+                                            }
+                                        }).catch(err => {
+                                            console.log(err)
+                                            setMessage('Erro ao enviar o email')
+                                            setIsSending(false)
+                                        })
+                                        }else{
+                                            setMessage(result.data.message)
+                                            setIsSending(false)
+                                        }
+                                    }).catch(err =>{
+                                        console.log(err)
+                                        setMessage('Erro ao localizar o email')
+                                        setIsSending(false)
+                                    })
+                                })}>
                                     <label className='text-[23px font-bold'>Digite seu email:</label>
-                                    <input className='rounded-[8px]  h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px] mt-[15px] mb-[15px]' type='email'/>
-                                    <input type='submit' value='Recuperar Senha' className={styles.buttonModal} />
+                                    <input {...register('email')} className='rounded-[8px]  h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px] mt-[15px] mb-[15px]' type='email'/>
+                                    {isSending ? <div className='flex justify-center'> <InfinitySpin /></div> :
+                                    <input type='submit' value='Recuperar Senha' className={styles.buttonModal}/>}
+                                    <span className='text-center'>{message}</span>
                                 </form>
                             </Modal>
                         </div>

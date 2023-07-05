@@ -14,7 +14,7 @@ import styles from '@/styles/Login.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Login() {
+export default function Login({id}) {
     const {register, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState('')
@@ -35,30 +35,25 @@ export default function Login() {
                         <div className={styles.formDiv}>
                             <h1 className='text-4xl font-bold italic text-[#72153D] mb-9'>Recuperar Senha</h1>
                             <form onSubmit={handleSubmit((data) => {
-                                setIsLoading(true)
-                                axios.post('/api/auth/login', data)
-                                .then(result => {
-                                    setIsLoading(false)
-                                    if(result.data.status == false) {
-                                        setHasError(result.data.message)
-                                    }else{
-                                        setLogin(result.data)
-                                        if(data.longLogin){
-                                            setCookie(null, 'token.authRRUN23', result.data.token, {
-                                                maxAge: 60 * 60 * 24 * 30 // 30 dias
-                                            })
+                                if(data.novaSenha == data.repetirSenha) {
+                                    setIsLoading(true)
+                                    axios.post('/api/auth/updatePassword', {...data, id})
+                                    .then(result => {
+                                        setIsLoading(false)
+                                        if(result.data.status == false) {
+                                            console.log(result.data)
+                                            setHasError(result.data.message)
                                         }else{
-                                            setCookie(null, 'token.authRRUN23', result.data.token, {
-                                                maxAge: 60 * 60 * 5 // 5 horas
-                                            })
+                                            location.href = '/login'
                                         }
-                                        router.push("/dashboard")
-                                    }
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                    alert("Ocorreu um erro, tente novamente mais tarde")
-                                })
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                        alert("Ocorreu um erro, tente novamente mais tarde")
+                                    })
+                                }else{
+                                    setHasError("As senhas devem ser iguais.")
+                                }
                             })}>
                                 <div className={styles.groupInput}>
                                     <div className={styles.inputUser}>
@@ -85,5 +80,15 @@ export default function Login() {
                 </div>
             </main>
         )
+    }
+}
+
+export async function getServerSideProps(ctx) {
+    const { id } = ctx.query;
+
+    return {
+        props: {
+            id
+        }
     }
 }

@@ -148,6 +148,49 @@ export default function Payment({runners, token, paymentValue}){
                                 console.log(err)
                             })
                         }
+                        if(data.paymentMethod == 'boleto'){
+                            setIsLoading(true)
+                            
+                            axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
+                            .then(result => {
+                                axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
+                                    .then(result => {
+                                        console.log(result.data)
+                                        if(result.data.status == false){
+                                            setIsLoading(false)
+                                            setHasError("Ocorreu um erro, tente novamente.")
+                                            return
+                                        }
+                                        if(result.data.status == 'failed') {
+                                            setIsLoading(false)
+                                            setHasError("Falha ao gerar o boleto, verifique seus dados e tente novamente!")
+                                            return
+                                        }
+                                        if(result.data.charges[0].last_transaction.status == 'genereted'){
+                                            window.open(result.data.charges[0].last_transaction.pdf)
+                                            router.push('/dashboard')
+                                            return
+                                        }
+                                        if(result.data.status == 'pending'){
+                                            window.open(result.data.charges[0].last_transaction.pdf)
+                                            router.push('/dashboard')
+                                            return
+                                        }
+                                        setIsLoading(false)
+                                        setHasError("Ocorreu um erro desconhecido, tente novamente!")
+                                    })
+                                    .catch(err => {
+                                        setIsLoading(false)
+                                        setHasError("Ocorreu um erro, tente novamente.")
+                                        console.log(err)
+                                    })
+                                })
+                            .catch(err => {
+                                setIsLoading(false)
+                                setHasError("CEP não localizado")
+                                console.log(err)
+                            })
+                        }
                     }else{
                         setHasError('CPF Inválido')
                     }
@@ -158,6 +201,7 @@ export default function Payment({runners, token, paymentValue}){
                             <option value=''></option>
                             <option value='pix'>PIX</option>
                             <option value='credito'>Cartão de Crédito</option>
+                            <option value='boleto'>Boleto</option>
                             <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option>
                         </select>
                     </div>
@@ -217,7 +261,7 @@ export default function Payment({runners, token, paymentValue}){
                     }
 
                     {/* CEP - Com validação */}
-                    {paymentMethod == 'credito'? 
+                    {paymentMethod == 'credito' || paymentMethod == 'boleto' ? 
                         <>
                         <div className='flex flex-col'>
                             <label>CEP:</label>

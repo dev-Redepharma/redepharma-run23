@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
-import {v4} from 'uuid'
 import axios from 'axios';
+import date from 'date-and-time';
+import {v4} from 'uuid'
 
 export default async function ConfirmPayAPI(req, res){
     const db = await mysql.createConnection({
@@ -225,5 +226,64 @@ export default async function ConfirmPayAPI(req, res){
           res.status(200).send({status: false, message: "Erro desconhecido, verifique seus dados e tente novamente."})
         }
       })
+    }
+
+    if(paymentMethod == 'boleto') {
+      let now = new Date();
+      let dueDate = date.format(date.addDays(now, 3), 'YYYY-MM-DD');
+
+      axios.post('https://api.pagar.me/core/v5/orders/', {
+        "items": [
+            {
+                "amount": Number(paymentValue + '00'),
+                "description": "Circuito Redepharma RUN 2023",
+                "code": "RRUN2023",
+                "quantity": 1
+            }
+        ],
+        "customer": {
+            "name": name,
+            "email": moreInfo[0][0].email,
+            "document_type": "CPF",
+            "document": (cpf.replaceAll('.', '')).replaceAll('-', ''),
+            "type": "Individual",
+            "address": {
+            "line_1": `${houseinfo.street}, ${numeroCasa}`,
+            "line_2": houseinfo.neighborhood,
+            "zip_code": String(houseinfo.cep),
+            "city": houseinfo.city,
+            "state": houseinfo.state,
+            "country": "BR"
+          }
+        },
+        "payments": [
+          {
+            "payment_method": "boleto",
+            "boleto": {
+              "instructions": "Pagar até o vencimento",
+              "due_at": `${dueDate}T00:00:00Z`,
+              "document_number": v4(),
+              "type": "DM"            
+              }
+          }
+        ]
+      }, {
+        headers: {
+            "Authorization": `Basic ${process.env.PAGARME_KEY}`,
+            "Content-Type": "application/json"
+        }
+      })
+        .then(async result => {
+          const queryBoleto = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?)`
+          const valuesBoleto = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at]
+          await db.execute(queryBoleto, valuesBoleto)
+          db.end()
+          res.status(200).send(result.data)
+        })
+        .catch(err => {
+          db.end()
+          res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento.", err});
+          console.log(err.config.data)
+        })
     }
 }
