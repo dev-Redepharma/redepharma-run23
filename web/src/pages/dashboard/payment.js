@@ -63,7 +63,7 @@ export default function Payment({runners, token, paymentValue}){
                 </div>
                 <div className={styles.gradientBorder}></div>
             </nav>
-            {runners.length > 1 ? 
+            {runners.length > 1  && String(paymentValue) !== '0'? 
                 <div className="py-[45px] px-[100px] flex justify-center gap-4">
                     <HiExclamationCircle size={25}></HiExclamationCircle>
                     <span>O Voucher é de uso individual remova uma ou mais pessoas para utiliza-lo.</span>
@@ -72,7 +72,8 @@ export default function Payment({runners, token, paymentValue}){
              ''}
             {hasError ?  <div className={styles.messageError}>
                 <HiExclamationTriangle /><span className='text-center'>{hasError}</span></div> : ''}
-            <div className={`flex justify-center ${runners.length > 1 ? '' : 'pt-[50px]'}`}>
+            <div className={`flex justify-center ${runners.length > 1 ? '' : 'pt-[50px]'} ${runners.length > 1 && String(paymentValue) !== '0' ? '' : 'mt-[45px]'}`}>
+                {String(paymentValue) !== "0" ? 
                 <form className='px-4 min-w-[500px]' onSubmit={handleSubmit((data) => {
                     if(cpf.isValid(data.cpf)){
                         if(data.paymentMethod == 'pix'){
@@ -327,6 +328,38 @@ export default function Payment({runners, token, paymentValue}){
                     </div>
                     }
                 </form>
+                :
+                <form className='px-4 min-w-[500px]' onSubmit={() => {
+                    console.log("É GRATIS")
+                }}>
+                    <div>
+                        <label>Tamanho Camisa:</label>
+                        {runners.map((runner, index) => 
+                            <div key={runner.id} className='flex gap-2'>
+                                <span>{runner.name}:</span>
+                                <div>
+                                    <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
+                                    <label htmlFor={'camisaP' + runner.id}>P</label>
+                                </div>
+                                <div>
+                                    <input {...register("camisa"+index)} type="radio" value={`m/${runner.id}`} id={'camisaM' + runner.id} required/>
+                                    <label htmlFor={'camisaM' + runner.id}>M</label>
+                                </div>
+                                <div>
+                                    <input {...register("camisa"+index)} type="radio" value={`g/${runner.id}`} id={'camisaG' + runner.id} required/>
+                                    <label htmlFor={'camisaG' + runner.id}>G</label>
+                                </div>
+                                <div>
+                                    <input {...register("camisa"+index)} type="radio" value={`gg/${runner.id}`} id={'camisaGG' + runner.id} required/>
+                                    <label htmlFor={'camisaGG' + runner.id}>GG</label>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <input value="Realizar Inscrição" className={styles.button} type="submit"/>
+                </form>
+                }
                 <div className='bg-white flex flex-col rounded-[20px] p-4 justify-between'>
                     <h1 className='italic font-bold text-[20px]'>Resumo do pagamento</h1>
                     <div className='flex flex-col'>

@@ -130,7 +130,8 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'voucher') {
-      const queryGetVoucher = `SELECT * FROM vouchers WHERE voucher = ? AND usado != 'true'`;
+      const queryGetVoucher = `SELECT * FROM vouchers WHERE voucher = ? AND usado != 'true' AND STR_TO_DATE(validade, '%d/%m/%Y') >= CURRENT_DATE()`;
+      
       const valuesGetVoucher = [voucher];
       const resultGetVoucher = await db.execute(queryGetVoucher, valuesGetVoucher);
       
@@ -262,7 +263,7 @@ export default async function ConfirmPayAPI(req, res){
             "boleto": {
               "instructions": "Pagar até o vencimento",
               "due_at": `${dueDate}T00:00:00Z`,
-              "document_number": v4(),
+              "document_number": 'VRBOL' + (v4()).split('-')[2]+(v4()).split('-')[3],
               "type": "DM"            
               }
           }
@@ -283,7 +284,6 @@ export default async function ConfirmPayAPI(req, res){
         .catch(err => {
           db.end()
           res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento.", err});
-          console.log(err.config.data)
         })
     }
 }

@@ -134,7 +134,7 @@ export default function Login() {
                                         if(result.data.status == true){
                                             axios.get(`https://inventario.redepharma.com.br/sendEmail.php?email=${data.email}&id=${result.data.uuid}`).then((resul) =>{
                                             if(resul.data == 'FOI'){
-                                                setMessage('Email enviado com sucesso!')
+                                                setMessage('Email enviado com sucesso! É possível que o email se localize na sua caixa de spam')
                                                 setIsSending(false)
                                             }else{
                                                 setMessage('Erro ao enviar o email')

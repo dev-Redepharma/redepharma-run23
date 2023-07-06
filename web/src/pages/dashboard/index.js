@@ -11,8 +11,9 @@ import styles from "@/styles/Dashboard.module.css";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Dashboard({runners, pendingPayment, analisingRunner, confimatedRunner}) {
+export default function Dashboard({runners, pendingPayment, analisingRunner, confimatedRunner, token}) {
     const { user } = useContext(AuthContext);
+    const [hasPayment, setHasPayment] = useState('');
 
     const router = useRouter();
 
@@ -24,11 +25,26 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
         }
     }
 
+    useEffect(() => {
+        axios.post('/api/info/runnersPayedPendingById', {id: token})
+        .then(result => {
+            (result.data).map(payment => {
+                if(payment.tipo == 'pix'){
+                    setHasPayment("Existe um pagamento via PIX pendente. Em até 30 minutos analisaremos para você!")
+                }
+                if(payment.tipo == 'boleto'){
+                    setHasPayment("Existe um pagamento por Boleto pendente. Em até 72 horas analisaremos para você!")
+                }
+            })
+        })
+        .catch(err => {console.log(err)})
+    }, [])
+
     return (
         <main className={inter.className}>
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
-                    <img src="RunBlack.png"/>
+                    <img src="RunBlack.png" className="cursor-pointer" onClick={() => {router.push('/home')}}/>
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
                         <span className="text-[17px] font-bold italic">Sair</span>
                         <HiLogout></HiLogout>  
@@ -90,12 +106,19 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                     )}
 
                 {/* SE TIVER EM ANÁLISE ELE AVISA SOBRE O TEMPO */}
-                    {analisingRunner ? 
+                {analisingRunner ? 
                     <div className="flex w-full py-[45px] justify-center">
                         <span>Pessoas em análise podem levar até 72hrs para serem validadas</span>
                     </div>
-                    : ''}
+                : ''}
                 
+                {/* MOSTRA SE EXISTE UM PAGAMENTO PENDENTE */}
+                {hasPayment ?
+                    <div className={`flex w-full justify-center pb-[45px] ${analisingRunner ? '' : 'pt-[45px]'}`}>
+                        <b>{hasPayment}</b>
+                    </div>
+                : ''}
+
                 {/* VERIFICA SE EXISTE AINDA PESSOAS PARA PAGAR */}
                 {pendingPayment ? 
                     <div className={`flex justify-between ${analisingRunner ? '' : 'py-[45px]'}`}>
@@ -113,7 +136,7 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                 {runners.length == confimatedRunner ? 
                     confimatedRunner > 1 ?
                         <div className="flex w-full py-[45px] justify-center">
-                            <span>Parabéns, suas inscrições estão confirmadas</span>
+                            <span className="font-bold text-[20px]">Parabéns, suas inscrições estão confirmadas</span>
                         </div> : 
                         <div className="flex w-full py-[45px] justify-center">
                             <span>Parabéns, sua inscrição está confirmada</span>

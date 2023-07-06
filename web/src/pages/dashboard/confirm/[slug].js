@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ['latin'] })
  
 export default function ConfirmRuners({data}) {
     const [author, setAuthor] = useState('')
+    const router = useRouter();
     
     useEffect(() => {
         axios.post('/api/auth/reload', {id: data[0].authorId})
@@ -25,7 +26,9 @@ export default function ConfirmRuners({data}) {
     <main className={inter.className}>
         <nav className={`flex w-full items-center justify-between relative`}>
             <div className={styles.navDashboard}>
-                <img src="/RunBlack.png"/>
+                <img src="/RunBlack.png" className="cursor-pointer" onClick={() => {
+                    router.push('/dashboard')
+                }}/>
                 <div className="flex items-center gap-2 cursor-pointer print:hidden" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
                     <span className="text-[17px] font-bold italic">Sair</span>
                     <HiLogout></HiLogout>  
