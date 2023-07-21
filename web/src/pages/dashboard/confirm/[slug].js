@@ -90,7 +90,7 @@ export default function ConfirmRuners({data}) {
 }
 
 export const getStaticPaths = async () => {
-    const { data } = await axios.get('/api/info/allRunnersConfirmated')
+    const { data } = await axios.get('https://redepharma-run23.vercel.app/api/info/allRunnersConfirmated')
     const paths = data.map(slug => {
         return {
             params: {
@@ -107,7 +107,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (ctx) => {
     const { slug } = ctx.params;
-    const { data } = await axios.post('/api/info/runnersByYourId', {id: slug})
+    const { data } = await axios.post('https://redepharma-run23.vercel.app/api/info/runnersByYourId', {id: slug})
 
     return {
         props: {
