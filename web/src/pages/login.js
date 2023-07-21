@@ -70,6 +70,7 @@ export default function Login() {
                                 .then(result => {
                                     // setIsLoading(false)
                                     if(result.data.status == false) {
+                                        setIsLoading(false)
                                         setHasError(result.data.message)
                                     }else{
                                         setLogin(result.data)

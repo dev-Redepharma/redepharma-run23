@@ -167,7 +167,7 @@ export default function NewRunner({token, id}) {
                         </>
                     }
                     <div className={`${stylesRunner.inputPCD}`}>
-                        <input {...register("lowIncome")} className={`${stylesRunner.inputRunner}`} type='checkbox' onChange={handleChangeLowIncome}></input>
+                        <input {...register("lowIncome")} className={`${stylesRunner.inputRunner}`} type='checkbox' disabled={false} onChange={handleChangeLowIncome}></input>
                         <span>Baixa Renda</span>
                     </div>
                     {!isLowIncome ? <div></div> :
