@@ -9,12 +9,12 @@ export default async function RunnersById(req, res) {
       });
       db.connect()
       try{
-        const query = `SELECT count(*) FROM runners WHERE status = 'confirmado' and lowIncome = true`;
+        const query = `SELECT count(*) as runnersLowIncome FROM runners WHERE status = 'confirmado' and lowIncome = true`;
         const values = [];
         const result = await db.execute(query, values);
         db.end();
         
-        res.status(200).send(result[0])
+        res.status(200).send(result[0][0])
       }catch{
         db.end();
         res.status(200).send({status: false, message: "Ocorreu um erro com o banco de dados"})

@@ -18,7 +18,7 @@ import Head from 'next/head';
 import stylesRunner from '@/styles/NewRunner.module.css'
 const inter = Inter({ subsets: ['latin'] })
 
-export default function NewRunner({token, id}) {
+export default function NewRunner({token, id, numberLowIncome}) {
     const {register, handleSubmit} = useForm()
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(null)
@@ -167,7 +167,7 @@ export default function NewRunner({token, id}) {
                         </>
                     }
                     <div className={`${stylesRunner.inputPCD}`}>
-                        <input {...register("lowIncome")} className={`${stylesRunner.inputRunner}`} type='checkbox' disabled={false} onChange={handleChangeLowIncome}></input>
+                        <input {...register("lowIncome")} className={`${stylesRunner.inputRunner}`} type='checkbox' disabled={numberLowIncome.runnersLowIncome >= 150} onChange={handleChangeLowIncome}></input>
                         <span>Baixa Renda</span>
                     </div>
                     {!isLowIncome ? <div></div> :
@@ -205,7 +205,9 @@ export async function getServerSideProps(ctx) {
 
     const id = v4()
 
+    const { data : numberLowIncome } = await axios.get('https://redepharma-run23.vercel.app/api/info/countLowIncome')
+
     return {
-        props: {token, id}
+        props: {token, id, numberLowIncome}
     }
 }
