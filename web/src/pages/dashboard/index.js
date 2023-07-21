@@ -169,7 +169,7 @@ export async function getServerSideProps(ctx) {
     var analisingRunner = 0
     var confimatedRunner = 0
 
-    const { data : runners } = await axios.post('/api/info/runnersById', {id: token})
+    const { data : runners } = await axios.post('https://redepharma-run23.vercel.app/api/info/runnersById', {id: token})
     runners.map(runner => {
         if(runner.status == 'pendente') pendingPayment+=1;
         if(runner.status == 'analise') analisingRunner+=1;

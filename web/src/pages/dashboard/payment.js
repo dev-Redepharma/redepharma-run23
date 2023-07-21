@@ -410,7 +410,7 @@ export async function getServerSideProps(ctx) {
         }
     }
 
-    const { data : runners } = await axios.post('/api/info/runnersPendingById', {id: token})
+    const { data : runners } = await axios.post('https://redepharma-run23.vercel.app/api/info/runnersPendingById', {id: token})
     var paymentValue = 0
     runners.map(runner => {
         if(runner.pcd || runner.lowIncome){
