@@ -130,6 +130,20 @@ export default async function ConfirmPayAPI(req, res){
       })
     }
 
+    if(paymentMethod == 'gratis') {
+      camisa.map(runner => {
+        try{
+          const queryUpdateVoucherRunner = `UPDATE runners SET status = 'confirmado', shirtSize = ? WHERE id = ?`;
+          const valueUpdateVoucherRunner = [runner.tamanho, runner.id];
+          db.execute(queryUpdateVoucherRunner, valueUpdateVoucherRunner);
+          db.end()
+          res.status(200).send({status: true, message: "Inscrição realizada com sucesso!"})
+        }catch(err){
+          res.status(200).send({status: false, message: "Ocorreu um erro.", err: err})
+        }
+      })
+    }
+
     if(paymentMethod == 'voucher') {
       const queryGetVoucher = `SELECT * FROM vouchers WHERE voucher = ? AND usado != 'true' AND STR_TO_DATE(validade, '%d/%m/%Y') >= CURRENT_DATE()`;
       

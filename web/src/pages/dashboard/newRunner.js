@@ -66,6 +66,7 @@ export default function NewRunner({token, id}) {
                 <div className={stylesRunner.gradientBorder}></div>
             </nav>
             <form className={`${stylesRunner.formRegisterNewRunner}`} onSubmit={handleSubmit((data =>{
+                setIsLoading(true);
                 if(cpf.isValid(data.cpf)){
                     axios.post('/api/register/newRunner', {
                         id: id,
@@ -95,6 +96,7 @@ export default function NewRunner({token, id}) {
                             alert("Ocorreu um erro, tente novamente mais tarde")
                         })
                 }else{
+                    setIsLoading(false)
                     setHasError("CPF Inválido")
                 }
             }))}>
@@ -177,8 +179,8 @@ export default function NewRunner({token, id}) {
                 </div>
                 <div className={`${stylesRunner.bottomBox}`}>
                     <div className={`${stylesRunner.bottomButtons}`}>
-                        {uploadingFB ? '' : <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>}
-                        {uploadingFB ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>}
+                        {uploadingFB ? '' : isLoading ? '' : <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>}
+                        {uploadingFB ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : isLoading ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>}
                         
                     </div>
                     <div className={stylesRunner.messageError}>

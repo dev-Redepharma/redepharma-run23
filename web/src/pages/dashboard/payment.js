@@ -333,9 +333,20 @@ export default function Payment({runners, token, paymentValue}){
                     }
                 </form>
                 :
-                <form className={`${styles.formFill}`} onSubmit={() => {
-                    console.log("É GRATIS")
-                }}>
+                <form className={`${styles.formFill}`} onSubmit={handleSubmit((data) => {
+                    setIsLoading(true);
+                    axios.post('/api/payment/confirm', {...data, token})
+                    .then(result => {
+                        if(result.data.status == false){
+                            setIsLoading(false)
+                            closeModal()
+                            setHasError("Ocorreu um erro, tente novamente.")
+                            return
+                        }
+                        router.push('/dashboard')
+                    })
+                })
+                }>
                     <div>
                         <label>Tamanho Camisa:</label>
                         {runners.map((runner, index) => 
@@ -360,7 +371,7 @@ export default function Payment({runners, token, paymentValue}){
                             </div>
                         )}
                     </div>
-
+                    <input {...register("paymentMethod")} value="gratis" type="hidden" />
                     <input value="Realizar Inscrição" className={styles.button} type="submit"/>
                 </form>
                 }
