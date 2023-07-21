@@ -1,17 +1,18 @@
 import mysql from 'mysql2/promise';
 
 export default async function RemoveRunnerAPI(req, res){
+  if(req.method === 'POST'){
     const db = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DB
     });
-
+  
     db.connect()
-
+  
   const {id} = req.body;
-
+  
   const query = `DELETE FROM runners WHERE (id = ?);`;
   const values = [id];
   await db.execute(query, values)
@@ -30,5 +31,5 @@ export default async function RemoveRunnerAPI(req, res){
       err: err
       })
     })
-
+  }
 }

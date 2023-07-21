@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
 
 export default async function Reload(req, res) {
+  if(req.method === 'POST'){
     const db = await mysql.createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -29,4 +30,5 @@ export default async function Reload(req, res) {
         db.end();
         res.status(200).send({status: false, message: "Ocorreu um erro com o banco de dados"})
       }
+  }
 }

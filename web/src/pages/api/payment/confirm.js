@@ -4,6 +4,7 @@ import date from 'date-and-time';
 import {v4} from 'uuid'
 
 export default async function ConfirmPayAPI(req, res){
+  if(req.method === 'POST'){
     const db = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -303,4 +304,5 @@ export default async function ConfirmPayAPI(req, res){
           res.status(200).send({status: false, message: "Ocorreu um erro de conexão com a empresa responsável pelo pagamento.", err});
         })
     }
+  }
 }

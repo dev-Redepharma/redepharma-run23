@@ -3,6 +3,7 @@ import mysql from 'mysql2/promise';
 import {v4} from 'uuid';
 
 export default async function Cadastro(req, res){
+  if(req.method === 'POST'){
     const db = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -43,5 +44,5 @@ export default async function Cadastro(req, res){
             })
         })
     }
-
+  }
 }
