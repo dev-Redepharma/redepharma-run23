@@ -67,13 +67,13 @@ export default function Payment({runners, token, paymentValue}){
                 </div>
                 <div className={styles.gradientBorder}></div>
             </nav>
-            {runners.length > 1  && String(paymentValue) !== '0'? 
+            {/* {runners.length > 1  && String(paymentValue) !== '0'? 
                 <div className={`${styles.infoVoucher}`}>
                     <HiExclamationCircle size={25}></HiExclamationCircle>
                     <span>O Voucher é de uso individual remova uma ou mais pessoas para utiliza-lo.</span>
                 </div>
              :
-             ''}
+             ''} */}
             {hasError ?  <div className={styles.messageError}>
                 <HiExclamationTriangle /><span className='text-center'>{hasError}</span></div> : ''}
             <div className={`${styles.box} ${runners.length > 1 ? '' : styles.boxRunner} ${runners.length > 1 && String(paymentValue) !== '0' ? '' : styles.boxRunnerInfo}`}>
@@ -372,7 +372,15 @@ export default function Payment({runners, token, paymentValue}){
                         )}
                     </div>
                     <input {...register("paymentMethod")} value="gratis" type="hidden" />
-                    <input value="Realizar Inscrição" className={styles.button} type="submit"/>
+                    {isLoading ? 
+                    <div className={`${styles.loadingBox}`}>
+                        <InfinitySpin width="150" color="#6CA721"/>
+                    </div>
+                    :
+                    <div>
+                        <input value="Realizar Inscrição" className={styles.button} type="submit"/>
+                    </div>
+                    }
                 </form>
                 }
                 <div className={`${styles.paymentResumeBox}`}>

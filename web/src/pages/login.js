@@ -68,7 +68,7 @@ export default function Login() {
                                 setIsLoading(true)
                                 axios.post('/api/auth/login', data)
                                 .then(result => {
-                                    setIsLoading(false)
+                                    // setIsLoading(false)
                                     if(result.data.status == false) {
                                         setHasError(result.data.message)
                                     }else{

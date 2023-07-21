@@ -83,8 +83,8 @@ export default function NewRunner({token, id}) {
                         numberNIS: data.numberNIS
                     })
                         .then(result => {
-                            setIsLoading(false)
                             if(result.data.status == false) {
+                                setIsLoading(false)
                                 setHasError(result.data.message)
                                 console.log(result.data.err)
                                 return

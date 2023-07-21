@@ -47,17 +47,19 @@ export default function Subscribe() {
                                                     return
                                                 }
                                                 router.push('/login')
-                                                setIsLoading(false)
+                                                // setIsLoading(false)
                                             })
                                             .catch(err => {
+                                                setIsLoading(false)
                                                 console.log(err)
+                                                setHasError('Ocorreu um erro, tente novamente!')
                                                 alert("Ocorreu um erro, tente novamente mais tarde")
                                             })
                                         }else{
-                                            setHasError('As senhas não são semelhantes')
+                                            setHasError('As senhas não são semelhantes.')
                                         }
                                 }else{
-                                    setHasError('Para prosseguir você precisa confirmar o regulamento')
+                                    setHasError('Para prosseguir você precisa confirmar os termos.')
                                 }
                             }))}>
                                 <div className={styles.groupInput}>
