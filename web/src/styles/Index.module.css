@@ -52,6 +52,16 @@
     height: 100%;
 }
 
+.header .sectionMain .infoRunHeader {
+    width: 300px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    margin-top: -16px;
+    gap: 16px;
+}
+
 .header .sectionMain .btnInscrever {
     background-color: #FBEA10;
     display: flex;
@@ -206,7 +216,7 @@
 /* START CARDSMAP */
 
 .routesSection .mapImage3{
-    background-image: url('/tempMap.png');
+    background-image: url('/map3km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -226,7 +236,7 @@
     transition: color .3s;
 }
 .routesSection .mapImage3:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map3km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -240,7 +250,7 @@
     color: #CB4F24;
 }
 .routesSection .mapImage3:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map3km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -252,7 +262,7 @@
 }
 
 .routesSection .mapImage5{
-    background-image: url('/tempMap.png');
+    background-image: url('/map5km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -272,7 +282,7 @@
     transition: color .3s;
 }
 .routesSection .mapImage5:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map5km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -286,7 +296,7 @@
     color: #CB4F24;
 }
 .routesSection .mapImage5:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map5km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -298,7 +308,7 @@
 }
 
 .routesSection .mapImage10{
-    background-image: url('/tempMap.png');
+    background-image: url('/map10km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -318,7 +328,7 @@
     transition: color .3s;
 }
 .routesSection .mapImage10:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map10km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -332,7 +342,7 @@
     color: #CB4F24;
 }
 .routesSection .mapImage10:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map10km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -344,7 +354,7 @@
 }
 
 .routesSection .mapImage15{
-    background-image: url('/tempMap.png');
+    background-image: url('/map15km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -364,7 +374,7 @@
     transition: color .3s;
 }
 .routesSection .mapImage15:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map15km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -378,7 +388,7 @@
     color: #CB4F24;
 }
 .routesSection .mapImage15:hover{
-    background-image: url('/tempMap.png');
+    background-image: url('/map15km.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120% 120%;
@@ -534,7 +544,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 50px 0;
+    padding: 50px 0;
+    background: url('/backgroundWaves4Footer.png') no-repeat center;
+    background-size: cover;
 }
 
 .contactSection h2 {
@@ -648,7 +660,7 @@
     /* START CARDSMAP */
     
     .routesSection .mapImage3{
-        background-image: url('/tempMap.png');
+        background-image: url('/map3km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -668,7 +680,7 @@
         transition: color .3s;
     }
     .routesSection .mapImage3:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map3km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -682,7 +694,7 @@
         color: #CB4F24;
     }
     .routesSection .mapImage3:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map3km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -694,7 +706,7 @@
     }
     
     .routesSection .mapImage5{
-        background-image: url('/tempMap.png');
+        background-image: url('/map5km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -714,7 +726,7 @@
         transition: color .3s;
     }
     .routesSection .mapImage5:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map5km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -728,7 +740,7 @@
         color: #CB4F24;
     }
     .routesSection .mapImage5:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map5km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -740,7 +752,7 @@
     }
     
     .routesSection .mapImage10{
-        background-image: url('/tempMap.png');
+        background-image: url('/map10km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -760,7 +772,7 @@
         transition: color .3s;
     }
     .routesSection .mapImage10:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map10km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -774,7 +786,7 @@
         color: #CB4F24;
     }
     .routesSection .mapImage10:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map10km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -786,7 +798,7 @@
     }
     
     .routesSection .mapImage15{
-        background-image: url('/tempMap.png');
+        background-image: url('/map15km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -806,7 +818,7 @@
         transition: color .3s;
     }
     .routesSection .mapImage15:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map15km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -820,7 +832,7 @@
         color: #CB4F24;
     }
     .routesSection .mapImage15:hover{
-        background-image: url('/tempMap.png');
+        background-image: url('/map15km.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 120% 120%;
@@ -1009,6 +1021,16 @@
         width: calc(100vw);
         height: auto;
     }
+    
+    .header .sectionMain .infoRunHeader {
+        width: 300px;
+        height: 130px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: -28px;
+        margin-top: 28px;
+        gap: 80px;
+    }    
 
     .routesSection {
         margin: 30px 80px;
@@ -1128,7 +1150,7 @@
     }
 
     .contactSection {
-        padding: 0 30px;
+        padding: 50px 30px;
     }
 
     .contactSection div span{

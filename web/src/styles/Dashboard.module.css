@@ -1,6 +1,16 @@
+.nav{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
 .navDashboard img{
     width: 80px;
+    cursor: pointer;
 }
+
 .navDashboard {
     padding: 10px 40px;
     display: flex;
@@ -8,12 +18,94 @@
     width: 100%;
 }
 
+.navLogout{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.navLogout span{
+    font-size: 17px;
+    font-weight: 700;
+    font-style: italic;
+}
 .gradientBorder {
     width: 100%;
     height: 4px;
     background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
     position: absolute;
     bottom: -4px;
+}
+
+.topTitle{
+    padding: 45px 100px;
+}
+
+.topBoxInfo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 28px;
+}
+
+.topBoxInfoIf{
+    border-bottom-width: 1px;
+    border-color: #000;
+}
+
+.topBoxTitle{
+    font-size: 32px;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.topBoxDetails{
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.boxAddRunner{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    
+}
+
+.messageInfoAbout{
+    padding: 45px 100px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.runnerTable{
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom-width: 1px;
+    border-color: #000;
+}
+
+.runnerTableFirstColumn{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.runnerTableMiddleColumn{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.runnerTableFinalColumn{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    cursor: pointer;
 }
 
 .button{
@@ -46,24 +138,73 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.tabelaInfo td, .tabelaInfo th {
-	border: 1px solid #ddd;
-	padding: 8px;
-    text-align: center;
-}
-  
-.tabelaInfo tr:nth-child(even){background-color: #f2f2f2;}
-  
-.tabelaInfo tr:hover {background-color: #ddd;}
-  
-.tabelaInfo th {
-	padding-top: 12px;
-	padding-bottom: 12px;
-	text-align: center;
-	background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
-	color: white;
+
+.timeWarning{
+    display: flex;
+    width: 100%;
+    padding: 45px;
+    justify-content: center;
 }
 
-.tabelaInfo th:nth-child(even) {
-	background: linear-gradient(90deg, #840D3B 0%, #E94E1B 100%);
+.infoAboutPayment{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding-bottom: 45px;
+}
+
+.infoAboutPaymentAnalysing{
+    padding-top: 45px;
+}
+
+.infoAboutPendingPayment{
+    display: flex;
+    justify-content: space-between;
+}
+
+.infoAboutPendingPaymentAnalysing{
+    padding-top: 45px;
+    padding-bottom: 45px;
+}
+
+.payButton{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.boxInfoSubscription{
+    display: flex;
+    width: 100%;
+    padding-top: 45px;
+    padding-bottom: 45px;
+    justify-content: center;
+}
+
+.messageInfoAboutSubscription{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+@media (max-width: 520px){
+    .topTitle{
+        padding: 15px 20px;
+    }
+    .topBoxInfo{
+        flex-direction: column;
+    }
+    .messageInfoAbout{
+        padding: 15px 20px;
+    }
+    .runnerTable{
+        flex-direction: column;
+        font-size: 15px;
+    }
+    .runnerTableFirstColumn span:last-child{
+        display: none;
+        
+    }
+    .runnerTableFirstColumn{
+        margin-bottom: 5px;
+    }
 }

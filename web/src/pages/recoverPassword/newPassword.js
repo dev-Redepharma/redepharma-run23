@@ -9,6 +9,7 @@ import Modal from 'react-modal';
 import { HiAtSymbol, HiLockClosed } from 'react-icons/hi';
 import { HiExclamationTriangle } from 'react-icons/hi2';
 import axios from 'axios'
+import Head from 'next/head';
 
 import styles from '@/styles/Login.module.css'
 
@@ -29,11 +30,14 @@ export default function Login({id}) {
         )
     }else{
         return (
-            <main className={`flex items-center justify-center h-[100vh] ${inter.className}`}>
+            <main className={`${styles.main} ${inter.className}`}>
+                <Head>
+                    <title>Nova Senha | Redepharma RUN</title>
+                </Head>
                 <div className={styles.borderGradient}>
                     <div className={styles.containerMain2}>
                         <div className={styles.formDiv}>
-                            <h1 className='text-4xl font-bold italic text-[#72153D] mb-9'>Recuperar Senha</h1>
+                            <h1 className={`${styles.title}`}>Recuperar Senha</h1>
                             <form onSubmit={handleSubmit((data) => {
                                 if(data.novaSenha == data.repetirSenha) {
                                     setIsLoading(true)

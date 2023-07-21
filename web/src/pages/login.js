@@ -10,6 +10,7 @@ import { HiAtSymbol, HiLockClosed } from 'react-icons/hi';
 import { HiExclamationTriangle } from 'react-icons/hi2';
 import axios from 'axios'
 import { InfinitySpin } from 'react-loader-spinner';
+import Head from 'next/head';
 
 import styles from '@/styles/Login.module.css'
 
@@ -55,11 +56,14 @@ export default function Login() {
         )
     }else{
         return (
-            <main className={`flex items-center justify-center h-[100vh] ${inter.className}`}>
+            <main className={`${styles.main} ${inter.className}`}>
+                <Head>
+                    <title>Login | Redepharma RUN</title>
+                </Head>
                 <div className={styles.borderGradient}>
                     <div className={styles.containerMain}>
                         <div className={styles.formDiv}>
-                            <h1 className='text-4xl font-bold italic text-[#72153D] mb-9'>Entrar</h1>
+                            <h1 className={`${styles.title}`}>Entrar</h1>
                             <form onSubmit={handleSubmit((data) => {
                                 setIsLoading(true)
                                 axios.post('/api/auth/login', data)
@@ -114,11 +118,11 @@ export default function Login() {
                                 <div className={styles.groupInput}>
                                     <input className={styles.button} value="Entrar" type="submit"/>
                                     <div className={styles.messageError}>
-                                        {hasError ? <><HiExclamationTriangle /><span className='text-center'>{hasError}</span></> : ''}
+                                        {hasError ? <><HiExclamationTriangle /><span className={`${styles.messageErrorSpan}`}>{hasError}</span></> : ''}
                                     </div>
                                 </div>
                             </form>
-                            <div className={`${styles.boxChange} flex justify-center`} onClick={() => router.push('/subscribe')}>
+                            <div className={`${styles.boxChange} ${styles.linkBox}`} onClick={() => router.push('/subscribe')}>
                                 <span>Registre-se</span>
                             </div>
                             <Modal
@@ -127,7 +131,7 @@ export default function Login() {
                                 style={customStyles}
                                 contentLabel="Example Modal"
                             >
-                                <form className='flex flex-col w-[65vh] ' onSubmit={handleSubmit((data) => {
+                                <form className={`${styles.formRecoverPassword}`} onSubmit={handleSubmit((data) => {
                                     setIsSending(true)
                                     axios.post('/api/info/searchEmail', data)
                                     .then(result => {
@@ -155,11 +159,11 @@ export default function Login() {
                                         setIsSending(false)
                                     })
                                 })}>
-                                    <label className='text-[23px font-bold'>Digite seu email:</label>
-                                    <input {...register('email')} className='rounded-[8px]  h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px] mt-[15px] mb-[15px]' type='email'/>
+                                    <label className={`${styles.formRecoverPasswordTitle}`}>Digite seu email:</label>
+                                    <input {...register('email')} className={`${styles.formRecoverPasswordInput}`}type='email'/>
                                     {isSending ? <div className='flex justify-center'> <InfinitySpin /></div> :
                                     <input type='submit' value='Recuperar Senha' className={styles.buttonModal}/>}
-                                    <span className='text-center'>{message}</span>
+                                    <span className={`${styles.messageErrorSpan}`}>{message}</span>
                                 </form>
                             </Modal>
                         </div>

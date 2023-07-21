@@ -9,6 +9,7 @@ import { InfinitySpin } from  'react-loader-spinner'
 import InputMask from 'react-input-mask';
 import axios from 'axios';
 import Modal from "react-modal";
+import Head from "next/head";
 
 import styles from '@/styles/Payment.module.css';
 import { useForm } from "react-hook-form";
@@ -51,6 +52,9 @@ export default function Payment({runners, token, paymentValue}){
 
     return(
         <main className={inter.className}>
+            <Head>
+                <title>Pagamento | Redepharma RUN</title>
+            </Head>
             <nav className={`flex w-full items-center justify-between relative`}>
                 <div className={styles.navDashboard}>
                     <img className="cursor-pointer" src="/RunBlack.png" onClick={() => {
@@ -64,7 +68,7 @@ export default function Payment({runners, token, paymentValue}){
                 <div className={styles.gradientBorder}></div>
             </nav>
             {runners.length > 1  && String(paymentValue) !== '0'? 
-                <div className="py-[45px] px-[100px] flex justify-center gap-4">
+                <div className={`${styles.infoVoucher}`}>
                     <HiExclamationCircle size={25}></HiExclamationCircle>
                     <span>O Voucher é de uso individual remova uma ou mais pessoas para utiliza-lo.</span>
                 </div>
@@ -72,9 +76,9 @@ export default function Payment({runners, token, paymentValue}){
              ''}
             {hasError ?  <div className={styles.messageError}>
                 <HiExclamationTriangle /><span className='text-center'>{hasError}</span></div> : ''}
-            <div className={`flex justify-center ${runners.length > 1 ? '' : 'pt-[50px]'} ${runners.length > 1 && String(paymentValue) !== '0' ? '' : 'mt-[45px]'}`}>
+            <div className={`${styles.box} ${runners.length > 1 ? '' : styles.boxRunner} ${runners.length > 1 && String(paymentValue) !== '0' ? '' : styles.boxRunnerInfo}`}>
                 {String(paymentValue) !== "0" ? 
-                <form className='px-4 min-w-[500px]' onSubmit={handleSubmit((data) => {
+                <form className={`${styles.formFill}`} onSubmit={handleSubmit((data) => {
                     if(cpf.isValid(data.cpf)){
                         if(data.paymentMethod == 'pix'){
                             setIsLoading(true)
@@ -196,53 +200,53 @@ export default function Payment({runners, token, paymentValue}){
                         setHasError('CPF Inválido')
                     }
                 })}>
-                    <div className='flex flex-col'>
+                    <div className={`${styles.inputBox}`}>
                         <label>Forma de pagamento:</label>
-                        <select {...register('paymentMethod')} onChange={(e) => {setPaymentMethod(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' required>
+                        <select {...register('paymentMethod')} onChange={(e) => {setPaymentMethod(e.target.value)}} className={`${styles.inputFill}`} required>
                             <option value=''></option>
                             <option value='pix'>PIX</option>
                             <option value='credito'>Cartão de Crédito</option>
                             <option value='boleto'>Boleto</option>
-                            <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option>
+                            {/* <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option> */}
                         </select>
                     </div>
-                    <div className='flex flex-col'>
+                    <div className={`${styles.inputBox}`}>
                         <label>Nome:</label>
-                        <input {...register('name')} onChange={(e) => {setCardName(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                        <input {...register('name')} onChange={(e) => {setCardName(e.target.value)}} className={`${styles.inputFill}`} type='text' required></input>
                     </div>
-                    <div className='flex flex-col'>
+                    <div className={`${styles.inputBox}`}>
                         <label>CPF:</label>
-                        <InputMask {...register("cpf")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="999.999.999-99" maskChar="" required></InputMask>
+                        <InputMask {...register("cpf")} className={`${styles.inputFill}`} type='text' mask="999.999.999-99" maskChar="" required></InputMask>
                     </div>
                     {/* DIV SE FOR POR CARTAO */}
                     {(paymentMethod == 'credito' || paymentMethod == 'debito') ? 
-                        <div className='flex justify-center items-center'>
-                            <div className={`${styles.card} flex flex-col p-4 mt-3`}>
-                                <div className='pb-4'>
-                                    <img src='/smallLogoRede.png' className='w-[50px] h-[50px]'/>
+                        <div className={`${styles.boxCard}`}>
+                            <div className={`${styles.card}`}>
+                                <div className={`${styles.cardImageBox}`}>
+                                    <img src='/smallLogoRede.png' className={`${styles.cardImage}`}/>
                                 </div>
-                                <div className='flex flex-col'>
-                                    <span className='text-white font-bold'>{cardName}</span>
-                                    <span className='text-white italic'>{cardNumber}</span>
-                                    <div className='flex gap-4 text-white font-bold'>
+                                <div className={`${styles.inputBox}`}>
+                                    <span className={`${styles.cardInfoNumber}`}>{cardName}</span>
+                                    <span className={`${styles.cardInfoNumber}`}>{cardNumber}</span>
+                                    <div className={`${styles.cardImportantInfo}`}>
                                         <span>{cardValidity}</span>
                                         <span>{cardCVV}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div className='pl-4'>
-                                <div className='flex flex-col'>
+                            <div className={`${styles.cardInformationNumber}`}>
+                                <div className={`${styles.inputBox}`}>
                                     <label>Número do cartão:</label>
-                                    <InputMask {...register("cardNumber")} onChange={(e) => {setCardNumber(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' mask="9999 9999 9999 9999" maskChar="" required></InputMask>
+                                    <InputMask {...register("cardNumber")} onChange={(e) => {setCardNumber(e.target.value)}} className={`${styles.inputFill}`} type='text' mask="9999 9999 9999 9999" maskChar="" required></InputMask>
                                 </div>
-                                <div className='flex gap-3'>
-                                    <div className='flex flex-col'>
+                                <div className={`${styles.cardInformations}`}>
+                                    <div className={`${styles.inputBox}`}>
                                         <label>CVV:</label>
-                                        <InputMask {...register("cardCVV")} onChange={(e) => {setCardCVV(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type="text" mask="999" maskChar="" required></InputMask>
+                                        <InputMask {...register("cardCVV")} onChange={(e) => {setCardCVV(e.target.value)}} className={`${styles.inputFill}`} type="text" mask="999" maskChar="" required></InputMask>
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className={`${styles.inputBox}`}>
                                         <label>Validade:</label>
-                                        <InputMask {...register("cardValidity")} onChange={(e) => {setCardValidity(e.target.value)}} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type="text" mask="99/99" maskChar="" required></InputMask>
+                                        <InputMask {...register("cardValidity")} onChange={(e) => {setCardValidity(e.target.value)}} className={`${styles.inputFill}`} type="text" mask="99/99" maskChar="" required></InputMask>
                                     </div>
                                 </div>
                             </div>
@@ -253,9 +257,9 @@ export default function Payment({runners, token, paymentValue}){
 
                     {/* DIV SE FOR POR VOUCHER */}
                     {(paymentMethod == 'voucher') ? 
-                        <div className='flex flex-col'>
+                        <div className={`${styles.inputBox}`}>
                             <label>Voucher:</label>
-                            <input {...register("voucher")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                            <input {...register("voucher")} className={`${styles.inputFill}`} type='text' required></input>
                         </div>
                         :
                         ''
@@ -264,13 +268,13 @@ export default function Payment({runners, token, paymentValue}){
                     {/* CEP - Com validação */}
                     {paymentMethod == 'credito' || paymentMethod == 'boleto' ? 
                         <>
-                        <div className='flex flex-col'>
+                        <div className={`${styles.inputBox}`}>
                             <label>CEP:</label>
-                            <input {...register("CEP")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='number' required></input>
+                            <input {...register("CEP")} className={`${styles.inputFill}`} type='number' required></input>
                         </div>
-                        <div className='flex flex-col'>
+                        <div className={`${styles.inputBox}`}>
                             <label>Número da residência:</label>
-                            <input {...register("numeroCasa")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required></input>
+                            <input {...register("numeroCasa")} className={`${styles.inputFill}`} type='text' required></input>
                         </div>
                         </>
                         :
@@ -280,9 +284,9 @@ export default function Payment({runners, token, paymentValue}){
 
                     {/* QUANTAS VEZES VAI SER PARCELADO */}
                     {(paymentMethod == 'credito') ? 
-                        <div className='flex flex-col'>
+                        <div className={`${styles.inputBox}`}>
                             <label>Parcelas:</label>
-                            <select {...register("parcelas")} className='rounded-[8px] h-[28px] border-[1px] border-black bg-[rgba(0,0,0,0.06)] px-[8px]' type='text' required>
+                            <select {...register("parcelas")} className={`${styles.inputFill}`} type='text' required>
                                 <option value={1}>1x - R${paymentValue},00</option>
                                 {runners.length > 1 ? <option value={2}>2x - R${Number(paymentValue)/2},00</option> : ''}
                                 {runners.length > 3 ? <option value={3}>3x - R${Number(paymentValue)/3},00</option> : ''}
@@ -294,7 +298,7 @@ export default function Payment({runners, token, paymentValue}){
                     <div>
                         <label>Tamanho Camisa:</label>
                         {runners.map((runner, index) => 
-                            <div key={runner.id} className='flex gap-2'>
+                            <div key={runner.id} className={`${styles.shirtInfo}`}>
                                 <span>{runner.name}:</span>
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
@@ -319,7 +323,7 @@ export default function Payment({runners, token, paymentValue}){
                     <input {...register("paymentValue")} value={paymentValue} type="hidden"/>
                     {/* BOTAO DE PAGAMENTO */}
                     {isLoading ? 
-                    <div className="w-full flex items-center justify-center">
+                    <div className={`${styles.loadingBox}`}>
                         <InfinitySpin width="150" color="#6CA721"/>
                     </div>
                     :
@@ -329,13 +333,13 @@ export default function Payment({runners, token, paymentValue}){
                     }
                 </form>
                 :
-                <form className='px-4 min-w-[500px]' onSubmit={() => {
+                <form className={`${styles.formFill}`} onSubmit={() => {
                     console.log("É GRATIS")
                 }}>
                     <div>
                         <label>Tamanho Camisa:</label>
                         {runners.map((runner, index) => 
-                            <div key={runner.id} className='flex gap-2'>
+                            <div key={runner.id} className={`${styles.shirtInfo}`}>
                                 <span>{runner.name}:</span>
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
@@ -360,14 +364,14 @@ export default function Payment({runners, token, paymentValue}){
                     <input value="Realizar Inscrição" className={styles.button} type="submit"/>
                 </form>
                 }
-                <div className='bg-white flex flex-col rounded-[20px] p-4 justify-between'>
-                    <h1 className='italic font-bold text-[20px]'>Resumo do pagamento</h1>
-                    <div className='flex flex-col'>
+                <div className={`${styles.paymentResumeBox}`}>
+                    <h1 className={`${styles.paymentResumeTitle}`}>Resumo do pagamento</h1>
+                    <div className={`${styles.inputBox}`}>
                         {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$0,00' : runner.lowIncome ? 'R$0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$50,00' : 'R$100,00'}</span>)}
                     </div>
-                    <div className='flex flex-col items-end'>
-                        <span className='italic text-[22px] leading-[5px]'>Subtotal:</span>
-                        <span className='font-black text-[27px] italic'>R${paymentValue},00</span>
+                    <div className={`${styles.paymentResumeTotalPrice}`}>
+                        <span className={`${styles.paymentResumeTotalPriceTitle}`}>Subtotal:</span>
+                        <span className={`${styles.paymentResumeTotalPriceValue}`}>R${paymentValue},00</span>
                     </div>
                 </div>
             </div>
@@ -377,18 +381,18 @@ export default function Payment({runners, token, paymentValue}){
                 style={customStyles}
                 contentLabel="ModalPix"
             >
-                <div className="flex justify-between items-center">
-                    <h2 className="text-[24px] font-bold italic">Quase lá!</h2>
-                    <HiX onClick={closeModal} size={25} className="cursor-pointer transition text-[rgba(0,0,0,0.5)] hover:text-[rgba(0,0,0,1)]"/>
+                <div className={`${styles.modalPaymentPixBox}`}>
+                    <h2 className={`${styles.modalPaymentPixBoxTitle}`}>Quase lá!</h2>
+                    <HiX onClick={closeModal} size={25} className={`${styles.modalPaymentPixBoxCloseButton}`}/>
                 </div>
-                <div className="flex mt-5 flex-col justify-center items-center">
+                <div className={`${styles.modalPaymentPixTitleInfo}`}>
                     <span>Para finalizar o pagamento, basta ler o QR-Code</span>
                     {imgPix ? <img src={imgPix} width={200}/> : <div className={styles.skeletonLoadingPix} />}
                     <span>ou copiar a chave a baixo:</span>
-                    {codePix ? <textarea value={codePix} className="resize-none w-full h-[100px] bg-[rgba(0,0,0,0.07) border-[2px] border-[#000]"/> : <div className={styles.skeletonLoadingCode}/>}
+                    {codePix ? <textarea value={codePix} className={`${styles.modalPaymentPixCodeArea}`}/> : <div className={styles.skeletonLoadingCode}/>}
                     {codePix ? <div onClick={() => {
                         navigator.clipboard.writeText(codePix)
-                    }} className={`items-center justify-center flex mt-5 ${styles.button}`}>Copiar</div> : ''}
+                    }} className={`${styles.modalPaymentPixButton} ${styles.button}`}>Copiar</div> : ''}
                 </div>
             </Modal>
         </main>

@@ -1,3 +1,19 @@
+.main{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title{
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 700;
+  color: #72153D;
+  margin-bottom: 36px;
+  font-style: italic;
+}
+
 .groupInput{
   position: relative;
   display: flex;
@@ -191,6 +207,10 @@
   margin-top: 10px;
 }
 
+.messageErrorSpan {
+  text-align: center;
+}
+
 .buttonModal{
   border: none;
   color: #FFF;
@@ -220,8 +240,58 @@
   color: #72153D;
 }
 
+.linkBox{
+  display: flex;
+  justify-content: center;
+}
+
 .anchorRules{
   cursor: pointer;
   color: #72153D;
   font-weight: 800;
+}
+
+.formRecoverPassword{
+  display: flex;
+  flex-direction: column;
+  width: 65vh;
+}
+
+.formRecoverPasswordTitle{
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.formRecoverPasswordInput{
+  border-radius: 8px;
+  height: 28px;
+  border-width: 1px;
+  border-color: #000;
+  background-color: rgba(0, 0, 0, 0.06);
+  padding: 0 8;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 890px){
+  .containerMain img{
+    display: none;
+  }
+}
+
+@media (max-width: 650px){
+  .borderGradient{
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+  .containerMain{
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+  .main{
+    padding: 0;
+  }
 }

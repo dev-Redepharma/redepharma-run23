@@ -1,45 +1,135 @@
+.nav{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.navDashboard {
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navDashboard img{
+  width: 80px;
+  cursor: pointer;
+}
+
+.navLogout{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.navLogout span{
+  font-size: 17px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.formRegisterNewRunner{
+  padding: 50px 80px;
+}
+
+.gradientBorder {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
+  position: absolute;
+  bottom: -4px;
+}
+
 .buttonCancel{
-    border: none;
-    color: #FFF;
-    border-radius: 8px;
-    background-color: #E94E1B !important;
-    height: 40px;
-    padding: 8px 17px;
-    font-size: 15px;
-    font-weight: 700;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-    transition: all .3s;
-  }
+  border: none;
+  color: #FFF;
+  border-radius: 8px;
+  background-color: #E94E1B !important;
+  height: 40px;
+  padding: 8px 17px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  transition: all .3s;
+}
   
-  .buttonCancel:hover{
-    cursor: pointer;
-    background-color: #C5451C !important;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  }
+.buttonCancel:hover{
+  cursor: pointer;
+  background-color: #C5451C !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
 
-  .buttonAddRunner{
-    border: none;
-    color: #FFF;
-    border-radius: 8px;
-    background-color: #6CA721 !important;
-    height: 40px;
-    padding: 8px 17px;
-    font-size: 15px;
-    font-weight: 700;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-    transition: all .3s;
-  }
+.buttonAddRunner{
+  border: none;
+  color: #FFF;
+  border-radius: 8px;
+  background-color: #6CA721 !important;
+  height: 40px;
+  padding: 8px 17px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  transition: all .3s;
+}
   
-  .buttonAddRunner:hover{
-    cursor: pointer;
-    background-color: #5d8e1c !important;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  }
+.buttonAddRunner:hover{
+  cursor: pointer;
+  background-color: #5d8e1c !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
 
-  .messageError {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    margin-top: 10px;
-  }
+.messageError {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.inputBox{
+  display: flex;
+  flex-direction: column;
+}
+
+.inputRunner{
+  border-radius: 8px;
+  height: 28px;
+  border-width: 1px;
+  border-color: #000;
+  background-color: rgba(0, 0, 0, 0.06);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.boxInputPCD{
+  display: flex;
+  flex-direction: column;
+  padding-top: 18px;
+  padding-bottom: 25px;
+}
+
+.messageUpload{
+  display: flex;
+  text-align: center;
+}
+
+.inputPCD{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bottomBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottomButtons{
+  display: flex;
+  gap: 40px;
+}

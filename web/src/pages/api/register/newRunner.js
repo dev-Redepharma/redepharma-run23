@@ -11,8 +11,9 @@ export default async function NewRunnerAPI(req, res){
     db.connect()
 
   const {id, token, name, cpf, phone, category, bornDate, gender, cep, pcd, lowIncome, numberNIS} = req.body;
-
-  const status = pcd ? 'analise' : lowIncome ? 'analise' : 'pendente'
+  
+  const age = bornDate.split('/')[2]
+  const status = pcd ? 'analise' : lowIncome ? 'analise' : 2023 - age >= 60 ? 'analise': 'pendente'
   const nis = numberNIS ? numberNIS : null
 
   const queryzinha = `SELECT * FROM runners WHERE cpf = ?`
@@ -41,5 +42,4 @@ export default async function NewRunnerAPI(req, res){
             })
         })
     }
-
 }

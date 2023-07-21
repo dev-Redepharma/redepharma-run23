@@ -9,6 +9,7 @@ import { HiExclamationTriangle, HiUser } from 'react-icons/hi2';
 import axios from 'axios'
 
 import styles from '@/styles/Login.module.css'
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,13 +28,15 @@ export default function Subscribe() {
         )
     }else{
         return (
-            <main className={`flex items-center justify-center h-[100vh] ${inter.className}`}>
+            <main className={`${styles.main} ${inter.className}`}>
+                <Head>
+                    <title>Inscrição | Redepharma RUN</title>
+                </Head>
                 <div className={styles.borderGradient}>
                     <div className={styles.containerMain}>
                         <div className={styles.formDiv}>
-                            <h1 className='text-4xl font-bold italic text-[#72153D] mb-9'>Cadastro</h1>
+                            <h1 className={`${styles.title}`}>Cadastro</h1>
                             <form onSubmit={handleSubmit((data =>{
-                                console.log(data.senhaVerificao, data.senha)
                                 if(data.confirmRules){
                                     if(data.senha == data.senhaVerificao){
                                         setIsLoading(true)
@@ -83,20 +86,20 @@ export default function Subscribe() {
                                 <div className={styles.groupRow}>
                                     <div className={styles.checkRemember}>
                                     <label className={styles.chk}>
-                                        <input {...register("confirmRules")} type='checkbox'/>
+                                        <input {...register("confirmRules")} type='checkbox' required/>
                                         <span/>
-                                        <p>LI e COMPREENDI o <a className={styles.anchorRules} href='/regulamento.pdf'>REGULAMENTO</a> da corrida</p>
+                                        <p>LI e COMPREENDI o <a className={styles.anchorRules} href='/regulamento.pdf'>REGULAMENTO</a> e a <a className={styles.anchorRules} href='/politica.pdf'>POLITICA DE DADOS</a> da corrida</p>
                                     </label>
                                     </div>
                                 </div>
                                 <div className={styles.groupInput}>
                                     <input className={styles.button} value="Cadastrar" type="submit"/>
                                     <div className={styles.messageError}>
-                                        {hasError ? <><HiExclamationTriangle /><span className='text-center'>{hasError}</span></> : ''}
+                                        {hasError ? <><HiExclamationTriangle /><span className={`${styles.messageErrorSpan}`}>{hasError}</span></> : ''}
                                     </div>
                                 </div>
                             </form>
-                            <div className={`${styles.boxChange} flex justify-center`} onClick={() => router.push('/login')}>
+                            <div className={`${styles.boxChange} ${styles.linkBox}`} onClick={() => router.push('/login')}>
                                 <span>Já Possuo Conta</span>
                             </div>
                         </div>

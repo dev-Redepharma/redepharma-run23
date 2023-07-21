@@ -164,7 +164,17 @@ export default async function ConfirmPayAPI(req, res){
       ],
       "customer": {
           "name": name,
-          "email": moreInfo[0][0].email
+          "email": moreInfo[0][0].email,
+          "phones": {
+            "mobile_phone": {
+                  "country_code": "55",
+                  "area_code": (firstRunner[0][0].phone).substring(0, 2),
+                  "number": "9"+((firstRunner[0][0].phone).substring(5)).replaceAll('-', '')
+            }
+          },
+          "document": (cpf.replaceAll('.', '')).replaceAll('-', ''),
+          "type": "Individual"
+
       },
       "payments": [
           {
@@ -248,13 +258,20 @@ export default async function ConfirmPayAPI(req, res){
             "document_type": "CPF",
             "document": (cpf.replaceAll('.', '')).replaceAll('-', ''),
             "type": "Individual",
+            "phones": {
+              "mobile_phone": {
+                    "country_code": "55",
+                    "area_code": (firstRunner[0][0].phone).substring(0, 2),
+                    "number": "9"+((firstRunner[0][0].phone).substring(5)).replaceAll('-', '')
+              }
+            },
             "address": {
-            "line_1": `${houseinfo.street}, ${numeroCasa}`,
-            "line_2": houseinfo.neighborhood,
-            "zip_code": String(houseinfo.cep),
-            "city": houseinfo.city,
-            "state": houseinfo.state,
-            "country": "BR"
+              "line_1": `${houseinfo.street}, ${numeroCasa}`,
+              "line_2": houseinfo.neighborhood,
+              "zip_code": String(houseinfo.cep),
+              "city": houseinfo.city,
+              "state": houseinfo.state,
+              "country": "BR"
           }
         },
         "payments": [

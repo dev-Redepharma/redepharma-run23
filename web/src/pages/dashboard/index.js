@@ -6,6 +6,7 @@ import { HiClock, HiCheckCircle, HiExclamationCircle, HiPrinter, HiXCircle } fro
 import { HiLogout, HiUserAdd, HiUserCircle, HiCash, HiX } from "react-icons/hi";
 import { Inter } from "next/font/google";
 import axios from "axios";
+import Head from "next/head";
 
 import styles from "@/styles/Dashboard.module.css";
 
@@ -42,43 +43,46 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
 
     return (
         <main className={inter.className}>
-            <nav className={`flex w-full items-center justify-between relative`}>
+            <Head>
+                <title>Painel | Redepharma RUN</title>
+            </Head>
+            <nav className={`${styles.nav}`}>
                 <div className={styles.navDashboard}>
-                    <img src="RunBlack.png" className="cursor-pointer" onClick={() => {router.push('/home')}}/>
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
-                        <span className="text-[17px] font-bold italic">Sair</span>
+                    <img src="RunBlack.png" onClick={() => {router.push('/')}}/>
+                    <div className={`${styles.navLogout}`} onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
+                        <span>Sair</span>
                         <HiLogout></HiLogout>  
                     </div>
                 </div>
                 <div className={styles.gradientBorder}></div>
             </nav>
-            <div className="py-[45px] px-[100px]">
-                <div className={`flex justify-between items-center pb-7 ${runners.length < 1 ? '' : 'border-b-[1px] border-black'}`}>
-                    <h1 className="text-[32px] font-bold italic">Corredores</h1>
-                    <div className="flex gap-8 items-center">
+            <div className={`${styles.topTitle}`}>
+                <div className={`${styles.topBoxInfo} ${runners.length < 1 ? '' :  styles.topBoxInfoIf}`}>
+                    <h1 className={`${styles.topBoxTitle}`}>Corredores</h1>
+                    <div className={`${styles.topBoxDetails}`}>
                         <span>
                             {confimatedRunner}/{runners.length} Confirmados
                         </span>
-                        <div onClick={() => router.push('/dashboard/newRunner')} className={`flex gap-2 items-center ${styles.button}`}>
+                        <div onClick={() => router.push('/dashboard/newRunner')} className={`${styles.boxAddRunner} ${styles.button}`}>
                             <HiUserAdd size={25}></HiUserAdd>
                             <span>Novo Corredor</span>
                         </div>
                     </div>
                 </div>
                 {runners.length < 1 ? 
-                <div className="py-[45px] px-[100px] flex justify-center gap-4">
+                <div className={`${styles.messageInfoAbout}`}>
                     <HiExclamationCircle size={25}></HiExclamationCircle>
                     <span>Você ainda não cadastrou nenhum corredor, que tal começarmos por você?</span>
                 </div> : 
                 <>
                 {runners.map(runner => 
-                    <div key={runner.id} className="p-4 flex items-center justify-between border-b-[1px] border-black">
-                        <div className="flex gap-4 items-center">
+                    <div key={runner.id} className={`${styles.runnerTable}`}>
+                        <div className={`${styles.runnerTableFirstColumn}`}>
                             <HiUserCircle size={25}></HiUserCircle>
                             <span>{runner.name}</span>
                             <span>{runner.cpf}</span>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className={`${styles.runnerTableMiddleColumn}`}>
                             {runner.status == 'confirmado' ? <HiCheckCircle size={25} /> : ''}
                             {runner.status == 'pendente' ? <HiExclamationCircle size={25} /> : ''}
                             {runner.status == 'analise' ? <HiClock size={25} /> : ''}
@@ -91,12 +95,12 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                         
                         {/* VERIFICA SE ESSA PESSOA JÁ PAGOU */}
                         {runner.status == 'confirmado' ? 
-                        <div onClick={() => {router.push(`/dashboard/confirm/${runner.id}`)}} className={`${styles.buttonStatusRunner} flex items-center gap-4 cursor-pointer`}>
+                        <div onClick={() => {router.push(`/dashboard/confirm/${runner.id}`)}} className={`${styles.buttonStatusRunner} ${styles.runnerTableFinalColumn}`}>
                             <HiPrinter size={25}></HiPrinter>
                             <span>Imprimir cartão de confirmação</span>
                         </div>
                          : 
-                        <div onClick={() => setAndOpenModal(runner.id)} className={`${styles.buttonStatusRunner} flex items-center gap-4 cursor-pointer`}>
+                        <div onClick={() => setAndOpenModal(runner.id)} className={`${styles.buttonStatusRunner} ${styles.runnerTableFinalColumn}`}>
                             <HiX size={25}></HiX>
                             <span>Retirar corredor</span>
                         </div>
@@ -107,23 +111,23 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
 
                 {/* SE TIVER EM ANÁLISE ELE AVISA SOBRE O TEMPO */}
                 {analisingRunner ? 
-                    <div className="flex w-full py-[45px] justify-center">
+                    <div className={`${styles.timeWarning}`}>
                         <span>Pessoas em análise podem levar até 72hrs para serem validadas</span>
                     </div>
                 : ''}
                 
                 {/* MOSTRA SE EXISTE UM PAGAMENTO PENDENTE */}
-                {hasPayment ?
-                    <div className={`flex w-full justify-center pb-[45px] ${analisingRunner ? '' : 'pt-[45px]'}`}>
+                {hasPayment && runners.length !== confimatedRunner ?
+                    <div className={`${styles.infoAboutPayment} ${analisingRunner ? '' : styles.infoAboutPaymentAnalysing}}`}>
                         <b>{hasPayment}</b>
                     </div>
                 : ''}
 
                 {/* VERIFICA SE EXISTE AINDA PESSOAS PARA PAGAR */}
                 {pendingPayment ? 
-                    <div className={`flex justify-between ${analisingRunner ? '' : 'py-[45px]'}`}>
+                    <div className={`${styles.infoAboutPendingPayment} ${analisingRunner ? '' : styles.infoAboutPendingPaymentAnalysing}`}>
                         <p>Resta o pagamento de {pendingPayment} pessoa(s). <br/>Garanta a inscrição, realize o pagamento.</p>
-                        <div className={`flex items-center gap-2 ${styles.button}`} onClick={() => {
+                        <div className={`${styles.payButton} ${styles.button}`} onClick={() => {
                             router.push('/dashboard/payment')
                         }}>
                             <HiCash size={25}></HiCash>
@@ -135,10 +139,10 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                 {/* VERIFICAR SE ESTÃO TODOS CONFIRMADOS, E SE É MAIOR QUE 1*/}
                 {runners.length == confimatedRunner ? 
                     confimatedRunner > 1 ?
-                        <div className="flex w-full py-[45px] justify-center">
-                            <span className="font-bold text-[20px]">Parabéns, suas inscrições estão confirmadas</span>
+                        <div className={`${styles.boxInfoSubscription}`}>
+                            <span className={`${styles.messageInfoAboutSubscription}`}>Parabéns, suas inscrições estão confirmadas</span>
                         </div> : 
-                        <div className="flex w-full py-[45px] justify-center">
+                        <div className={`${styles.boxAboutSubscription}`}>
                             <span>Parabéns, sua inscrição está confirmada</span>
                         </div> :
                 '' }

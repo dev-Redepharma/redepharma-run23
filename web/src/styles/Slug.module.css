@@ -1,0 +1,109 @@
+.nav{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.navDashboard img{
+    width: 80px;
+    cursor: pointer;
+}
+
+.navDashboard {
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navLogout{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    
+}
+
+.navLogout span{
+    font-size: 17px;
+    font-weight: 700;
+    font-style: italic;
+}
+.gradientBorder {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
+    position: absolute;
+    bottom: -4px;
+}
+
+.title{
+    text-align: center;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 28px;
+    margin-top: 40px;
+}
+
+.button{
+    border: none;
+    color: #FFF;
+    border-radius: 8px;
+    background-color: #E94E1B !important;
+    height: 40px;
+    padding: 8px 17px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    transition: all .3s;
+}
+  
+.button:hover{
+    cursor: pointer;
+    background-color: #C5451C !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.table{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tabelaInfo td, .tabelaInfo th {
+	border: 1px solid #ddd;
+	padding: 8px;
+    text-align: center;
+}
+  
+.tabelaInfo tr:nth-child(even){background-color: #f2f2f2;}
+  
+.tabelaInfo tr:hover {background-color: #ddd;}
+  
+.tabelaInfo th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background: linear-gradient(90deg, #E94E1B 0%, #840D3B 100%);
+	color: white;
+}
+
+.tabelaInfo th:nth-child(even) {
+	background: linear-gradient(90deg, #840D3B 0%, #E94E1B 100%);
+}
+
+
+
+
+@media print {
+    .navLogout{
+        display: none;
+    }
+    .button{
+        display: none;
+    }
+}

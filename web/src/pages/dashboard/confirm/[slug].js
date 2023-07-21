@@ -6,8 +6,9 @@ import { HiPrinter } from "react-icons/hi2"
 import { HiLogout } from "react-icons/hi";
 import { Inter } from "next/font/google";
 import axios from "axios";
+import Head from "next/head";
 
-import styles from "@/styles/Dashboard.module.css";
+import styles from "@/styles/Slug.module.css";
 
 const inter = Inter({ subsets: ['latin'] })
  
@@ -24,21 +25,25 @@ export default function ConfirmRuners({data}) {
     }, [])
   return(
     <main className={inter.className}>
-        <nav className={`flex w-full items-center justify-between relative`}>
+        <Head>
+            <title>Cartão de Confirmação | Redepharma RUN</title>
+        </Head>
+        <nav className={`${styles.nav}flex w-full items-center justify-between relative`}>
             <div className={styles.navDashboard}>
                 <img src="/RunBlack.png" className="cursor-pointer" onClick={() => {
                     router.push('/dashboard')
                 }}/>
-                <div className="flex items-center gap-2 cursor-pointer print:hidden" onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
-                    <span className="text-[17px] font-bold italic">Sair</span>
+                <div className={`${styles.navLogout}`} onClick={() => {destroyCookie(null, 'token.authRRUN23'); router.push('/login')}}>
+                    <span>Sair</span>
                     <HiLogout></HiLogout>  
                 </div>
             </div>
             <div className={styles.gradientBorder}></div>
         </nav>
 
-            <h1 className="text-center my-10 font-bold italic text-[28px]">Cartão de Inscrição - Circuito Redepharma RUN</h1>
-        <div className="flex justify-center items-center flex-col gap-3" id='tablePDF'>
+            <h1 className={`${styles.title}`}>Cartão de Inscrição - Circuito Redepharma RUN</h1>
+            <span className="flex mb-10 italic justify-center text-center">Seu número de peito será definido no momento da entrega do kit</span>
+        <div className={`${styles.table}`} id='tablePDF'>
             <table id='tablePDF' className={styles.tabelaInfo}>
                 <thead>
                     <tr>
@@ -48,7 +53,7 @@ export default function ConfirmRuners({data}) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Número de inscrição</td>
+                        <td>Código Interno</td>
                         <td>{(data[0].id).substring(0,8)}...</td>
                     </tr>
                     <tr>
@@ -57,7 +62,7 @@ export default function ConfirmRuners({data}) {
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td>{author.email}</td>
+                        <td>{author?.email}</td>
                     </tr>
                     <tr>
                         <td>Telefone</td>
@@ -77,7 +82,7 @@ export default function ConfirmRuners({data}) {
                     </tr>
                 </tbody>
             </table>
-        <div onClick={() => {window.print();}} className={`print:hidden ${styles.button}`}>Imprimir</div>
+        <div onClick={() => {window.print();}} className={`${styles.button}`}>Imprimir</div>
         </div>
 
     </main>
