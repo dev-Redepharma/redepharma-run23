@@ -80,7 +80,8 @@ export default function NewRunner({token, id, numberLowIncome}) {
                         category: data.category,
                         lowIncome: data.lowIncome,
                         token: token,
-                        numberNIS: data.numberNIS
+                        numberNIS: data.numberNIS,
+                        cadeirante: data.cadeirante
                     })
                         .then(result => {
                             if(result.data.status == false) {
@@ -158,12 +159,17 @@ export default function NewRunner({token, id, numberLowIncome}) {
                     </div>
                     {!isPCD ? <div></div> :
                         <>
+                            <div className='flex gap-2'>
+                                <input type='checkbox' {...register("cadeirante")} />
+                                <label>Cadeirante</label>
+                            </div>
                             <div className={`${stylesRunner.boxInputPCD}`}>
                                 <label {...register("attachmentPCD")}>Selecione o comprovante PCD: </label>
                                 <input type='file' onChange={(e)=>{
                                     uploadToFirebase(e.target.files[0])}} required/>
                             </div>
                             <div className='flex text-center'>{messageFirebaseUpload}</div>
+                            
                         </>
                     }
                     <div className={`${stylesRunner.inputPCD}`}>
