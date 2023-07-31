@@ -10,7 +10,7 @@ export default async function UpdateRunner(req, res) {
       });
       db.connect()
       try{
-        const { chargeId, status } = req.body;
+        const { chargeId, status, voucher, name, cpf } = req.body;
         const query = `SELECT camisas FROM transactions WHERE chargeId = ?`;
         const values = [chargeId];
         const result = await db.execute(query, values);
@@ -18,6 +18,10 @@ export default async function UpdateRunner(req, res) {
         const queryUpdate = `UPDATE transactions SET status = ? WHERE chargeId = ?`;
         const valuesUpdate = [status, chargeId];
         db.execute(queryUpdate, valuesUpdate);
+
+        const queryUpdateVoucher = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ?`
+        const valuesUpdateVoucher = [name, cpf, voucher]
+        db.execute(queryUpdateVoucher, valuesUpdateVoucher)
         
         var runners = JSON.parse(result[0][0].camisas);
 

@@ -38,6 +38,14 @@ export default async function ConfirmPayAPI(req, res){
     camisa8,
     camisa9
   } = req.body;
+
+  console.log(voucher)
+  var voucherF = null
+  if(voucher.length > 0){
+    voucherF = voucher
+  }else{
+    voucherF = null
+  }
    
   // Verificações se existem camisas
    const camisa = []
@@ -118,8 +126,9 @@ export default async function ConfirmPayAPI(req, res){
       }
       })
       .then(async result => {
-        const queryPix = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?)`
-        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at]
+
+        const queryPix = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data, voucher) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at, voucherF]
         await db.execute(queryPix, valuesPix)
         db.end()
         res.status(200).send(result.data)
@@ -225,11 +234,20 @@ export default async function ConfirmPayAPI(req, res){
         const queryCredito = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?)`
         const valuesCredito = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at]
         await db.execute(queryCredito, valuesCredito)
-        db.end()
+        
 
         if(result.data.status == 'paid'){
           axios.post('/api/info/updateRunner', {chargeId: result.data.charges[0].id, status: 'paid'})
-          .then(resul => {
+          .then(async resul => {
+
+            if(voucher.length > 0){
+              const queryUseVoucherForReal = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ? `;
+              const valuesUseVoucherForReal = [name, cpf, voucherF];
+        
+              await db.execute(queryUseVoucherForReal, valuesUseVoucherForReal);
+            }
+            db.end()
+
             res.status(200).send({status: true, message: "Pagamento autorizado"})
           })
           .catch(err => {
@@ -307,6 +325,7 @@ export default async function ConfirmPayAPI(req, res){
         }
       })
         .then(async result => {
+
           const queryBoleto = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?)`
           const valuesBoleto = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at]
           await db.execute(queryBoleto, valuesBoleto)

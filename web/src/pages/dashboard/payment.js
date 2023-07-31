@@ -29,7 +29,7 @@ const customStyles = {
 
   Modal.setAppElement('#__next');
 export default function Payment({runners, token, paymentValue}){
-    const {register, handleSubmit} = useForm();
+    const {register, handleSubmit, setValue} = useForm();
     const [paymentMethod, setPaymentMethod] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [cardName, setCardName] = useState('');
@@ -40,6 +40,8 @@ export default function Payment({runners, token, paymentValue}){
     const [codePix, setCodePix] = useState('');
     const [hasError, setHasError] = useState(null);
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [voucher, setVoucher] = useState('');
+    const [paymentValor, setPaymentValor] = useState(paymentValue)
     
     const router = useRouter()
     
@@ -83,6 +85,7 @@ export default function Payment({runners, token, paymentValue}){
                         if(data.paymentMethod == 'pix'){
                             setIsLoading(true)
                             openModal()
+                            console.log(data)
                             axios.post('/api/payment/confirm', {...data, token})
                                 .then(result => {
                                     if(result.data.status == false){
@@ -98,7 +101,7 @@ export default function Payment({runners, token, paymentValue}){
                                         axios.post('/api/payment/check', {id: result.data?.charges[0]?.id})
                                         .then(resul => {
                                             if(resul.data?.status == "paid"){
-                                                axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status})
+                                                axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status, voucher: data.voucher, name: data.name, cpf: data.cpf})
                                                 .then(() => {clearInterval(checkPayment); router.push('/dashboard')})
                                                 .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
                                             }
@@ -256,14 +259,14 @@ export default function Payment({runners, token, paymentValue}){
                     }
 
                     {/* DIV SE FOR POR VOUCHER */}
-                    {(paymentMethod == 'voucher') ? 
+                    {/* {(paymentMethod == 'voucher') ? 
                         <div className={`${styles.inputBox}`}>
                             <label>Voucher:</label>
                             <input {...register("voucher")} className={`${styles.inputFill}`} type='text' required></input>
                         </div>
                         :
                         ''
-                    }
+                    } */}
 
                     {/* CEP - Com validação */}
                     {paymentMethod == 'credito' || paymentMethod == 'boleto' ? 
@@ -287,7 +290,7 @@ export default function Payment({runners, token, paymentValue}){
                         <div className={`${styles.inputBox}`}>
                             <label>Parcelas:</label>
                             <select {...register("parcelas")} className={`${styles.inputFill}`} type='text' required>
-                                <option value={1}>1x - R${paymentValue},00</option>
+                                <option value={1}>1x - R${paymentValor},00</option>
                                 {runners.length > 1 ? <option value={2}>2x - R${Number(paymentValue)/2},00</option> : ''}
                                 {runners.length > 3 ? <option value={3}>3x - R${Number(paymentValue)/3},00</option> : ''}
                             </select>
@@ -320,7 +323,35 @@ export default function Payment({runners, token, paymentValue}){
                         )}
                     </div>
                     {/* Input referente ao valor */}
-                    <input {...register("paymentValue")} value={paymentValue} type="hidden"/>
+                    <input {...register("paymentValue")} value={paymentValor} type="hidden"/>
+                    <div className='flex items-center mb-2 gap-2'>
+                        <div className='flex gap-2'>
+                            <label>Voucher:</label>
+                            <input type='text' {...register('voucher')} className={`${styles.inputFill}`} onChange={(e) => {
+                                setVoucher(e.target.value)
+                            }}/>
+                        </div>
+                        <div className={`${styles.button} flex items-center justify-center`} onClick={() => {
+                            setIsLoading(true)
+                            axios.post('/api/payment/voucher', {voucher})
+                            .then(result => {
+                                if(result.data.status){
+                                    setIsLoading(false)
+                                    setHasError(result.data.message)
+                                    setPaymentValor(paymentValue * 0.8)
+                                    setValue('paymentValue', paymentValue * 0.8) 
+                                }else{
+                                    setHasError(result.data.message)
+                                    setIsLoading(false)
+                                }
+                            }).catch(err => {
+                                setIsLoading(false)
+                                console.log(err)
+                                alert('Não foi possível se comunicar com o sistema. Aguarde, em breve o erro será solucionado.')
+                            })
+                        }}>Aplicar</div>
+                    </div>
+
                     {/* BOTAO DE PAGAMENTO */}
                     {isLoading ? 
                     <div className={`${styles.loadingBox}`}>
@@ -386,11 +417,11 @@ export default function Payment({runners, token, paymentValue}){
                 <div className={`${styles.paymentResumeBox}`}>
                     <h1 className={`${styles.paymentResumeTitle}`}>Resumo do pagamento</h1>
                     <div className={`${styles.inputBox}`}>
-                        {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$0,00' : runner.lowIncome ? 'R$0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$50,00' : 'R$100,00'}</span>)}
+                        {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$0,00' : runner.lowIncome ? 'R$0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$'+paymentValor+',00' : 'R$'+paymentValor+',00'}</span>)}
                     </div>
                     <div className={`${styles.paymentResumeTotalPrice}`}>
                         <span className={`${styles.paymentResumeTotalPriceTitle}`}>Subtotal:</span>
-                        <span className={`${styles.paymentResumeTotalPriceValue}`}>R${paymentValue},00</span>
+                        <span className={`${styles.paymentResumeTotalPriceValue}`}>R${paymentValor},00</span>
                     </div>
                 </div>
             </div>
