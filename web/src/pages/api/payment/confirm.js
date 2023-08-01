@@ -40,11 +40,13 @@ export default async function ConfirmPayAPI(req, res){
   } = req.body;
 
   console.log(voucher)
-  var voucherF = null
-  if(voucher.length > 0){
-    voucherF = voucher
-  }else{
-    voucherF = null
+  if(voucher){
+    var voucherF = null
+    if(voucher.length > 0){
+      voucherF = voucher
+    }else{
+      voucherF = null
+    }
   }
    
   // Verificações se existem camisas
