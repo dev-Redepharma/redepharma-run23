@@ -376,6 +376,11 @@ export default function Payment({runners, token, paymentValue}){
                         }
                         router.push('/dashboard')
                     })
+                    .catch(err => {
+                        setIsLoading(false)
+                        console.log(err)
+                        alert('Não foi possível se comunicar com o sistema. Aguarde, em breve o erro será solucionado.')
+                    })
                 })
                 }>
                     <div>
