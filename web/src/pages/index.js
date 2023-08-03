@@ -50,15 +50,15 @@ export default function Home() {
       <Marquee pauseOnHover={true} speed={70} gradientColor={[230, 233, 242]} className={styles.patrocinadores}>
         <div className={styles.providers} id="sobre">
             <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/tenabrasil")}} className='cursor-pointer' src='tena.png' alt='tena o patrocinador'/>
             <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/tenabrasil")}} className='cursor-pointer' src='tena.png' alt='tena o patrocinador'/>
             <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/tenabrasil")}} className='cursor-pointer' src='tena.png' alt='tena o patrocinador'/>
             <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/tenabrasil")}} className='cursor-pointer' src='tena.png' alt='tena o patrocinador'/>
             <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/tenabrasil")}} className='cursor-pointer' src='tena.png' alt='tena o patrocinador'/>
         </div>
       </Marquee>
       <div className={styles.aboutSection}>
