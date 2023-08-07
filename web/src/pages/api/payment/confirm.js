@@ -91,6 +91,12 @@ export default async function ConfirmPayAPI(req, res){
     const firstRunner = await db.execute(queryFirstRunner, valuesFirstRunner);
 
     if(paymentMethod == 'pix') {
+      let voucherPix = null
+      if(voucher){
+        if(voucher.length > 0){
+          voucherPix = voucher
+        }
+      }
       axios.post('https://api.pagar.me/core/v5/orders/', {
         "customer": {
               "phones": {
@@ -130,7 +136,7 @@ export default async function ConfirmPayAPI(req, res){
       .then(async result => {
 
         const queryPix = `INSERT INTO transactions (id, transId, chargeId, accountId, tipo, valor, status, camisas, data, voucher) VALUES ('${v4()}', ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at, voucherF]
+        const valuesPix = [result.data.charges[0].last_transaction.id, result.data.charges[0].id, token, paymentMethod, paymentValue, result.data.status, JSON.stringify(camisa), result.data.created_at, voucherPix]
         await db.execute(queryPix, valuesPix)
         db.end()
         res.status(200).send(result.data)
