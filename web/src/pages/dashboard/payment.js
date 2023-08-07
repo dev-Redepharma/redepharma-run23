@@ -324,33 +324,35 @@ export default function Payment({runners, token, paymentValue}){
                     </div>
                     {/* Input referente ao valor */}
                     <input {...register("paymentValue")} value={paymentValor} type="hidden"/>
-                    <div className='flex items-center mb-2 gap-2'>
-                        <div className='flex gap-2'>
-                            <label>Voucher:</label>
-                            <input type='text' {...register('voucher')} className={`${styles.inputFill}`} onChange={(e) => {
-                                setVoucher(e.target.value)
-                            }}/>
+                    {runners.length > 1 ? '' : 
+                        <div className='flex items-center mb-2 gap-2'>
+                            <div className='flex gap-2'>
+                                <label>Voucher:</label>
+                                <input type='text' {...register('voucher')} className={`${styles.inputFill}`} onChange={(e) => {
+                                    setVoucher(e.target.value)
+                                }}/>
+                            </div>
+                            <div className={`${styles.button} flex items-center justify-center`} onClick={() => {
+                                setIsLoading(true)
+                                axios.post('/api/payment/voucher', {voucher})
+                                .then(result => {
+                                    if(result.data.status){
+                                        setIsLoading(false)
+                                        setHasError(result.data.message)
+                                        setPaymentValor(paymentValue * 0.8)
+                                        setValue('paymentValue', paymentValue * 0.8) 
+                                    }else{
+                                        setHasError(result.data.message)
+                                        setIsLoading(false)
+                                    }
+                                }).catch(err => {
+                                    setIsLoading(false)
+                                    console.log(err)
+                                    alert('Não foi possível se comunicar com o sistema. Aguarde, em breve o erro será solucionado.')
+                                })
+                            }}>Aplicar</div>
                         </div>
-                        <div className={`${styles.button} flex items-center justify-center`} onClick={() => {
-                            setIsLoading(true)
-                            axios.post('/api/payment/voucher', {voucher})
-                            .then(result => {
-                                if(result.data.status){
-                                    setIsLoading(false)
-                                    setHasError(result.data.message)
-                                    setPaymentValor(paymentValue * 0.8)
-                                    setValue('paymentValue', paymentValue * 0.8) 
-                                }else{
-                                    setHasError(result.data.message)
-                                    setIsLoading(false)
-                                }
-                            }).catch(err => {
-                                setIsLoading(false)
-                                console.log(err)
-                                alert('Não foi possível se comunicar com o sistema. Aguarde, em breve o erro será solucionado.')
-                            })
-                        }}>Aplicar</div>
-                    </div>
+                    }
 
                     {/* BOTAO DE PAGAMENTO */}
                     {isLoading ? 
