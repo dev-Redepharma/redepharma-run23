@@ -185,6 +185,12 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'credito') {
+      let voucherCredito = ""
+      if(voucher){
+        if(voucher.length > 0){
+          voucherCredito = voucher
+        }
+      }
       axios.post('https://api.pagar.me/core/v5/orders/', {
         "items": [
           {
@@ -251,7 +257,7 @@ export default async function ConfirmPayAPI(req, res){
             if(voucher){
               if(voucher.length > 0){
                 const queryUseVoucherForReal = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ? `;
-                const valuesUseVoucherForReal = [name, cpf, voucherF];
+                const valuesUseVoucherForReal = [name, cpf, voucherCredito];
           
                 await db.execute(queryUseVoucherForReal, valuesUseVoucherForReal);
               }
