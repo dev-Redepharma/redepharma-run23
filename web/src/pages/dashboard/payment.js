@@ -364,6 +364,9 @@ export default function Payment({runners, token, paymentValue}){
                         <input value="Realizar Pagamento" className={styles.button} type="submit"/>
                     </div>
                     }
+
+                    {hasError ?  <div className={styles.messageError}>
+                        <HiExclamationTriangle /><span className='text-center'>{hasError}</span></div> : ''}
                 </form>
                 :
                 <form className={`${styles.formFill}`} onSubmit={handleSubmit((data) => {
