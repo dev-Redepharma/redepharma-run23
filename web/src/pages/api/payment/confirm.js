@@ -41,11 +41,11 @@ export default async function ConfirmPayAPI(req, res){
 
   console.log(voucher)
   if(voucher){
-    var voucherF = null
+    var voucherF = ""
     if(voucher.length > 0){
       voucherF = voucher
     }else{
-      voucherF = null
+      voucherF = ""
     }
   }
    
@@ -244,15 +244,17 @@ export default async function ConfirmPayAPI(req, res){
         await db.execute(queryCredito, valuesCredito)
         
 
-        if(result.data.status == 'paid'){
+        if(result.data.charges[0].status == 'paid'){
           axios.post('/api/info/updateRunner', {chargeId: result.data.charges[0].id, status: 'paid'})
           .then(async resul => {
 
-            if(voucher.length > 0){
-              const queryUseVoucherForReal = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ? `;
-              const valuesUseVoucherForReal = [name, cpf, voucherF];
-        
-              await db.execute(queryUseVoucherForReal, valuesUseVoucherForReal);
+            if(voucher){
+              if(voucher.length > 0){
+                const queryUseVoucherForReal = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ? `;
+                const valuesUseVoucherForReal = [name, cpf, voucherF];
+          
+                await db.execute(queryUseVoucherForReal, valuesUseVoucherForReal);
+              }
             }
             db.end()
 
@@ -264,7 +266,7 @@ export default async function ConfirmPayAPI(req, res){
         }
 
         if(result.data.status == 'failed'){
-          res.status(200).send({status: false, message: "Falha no pagamento, verifique seus dados e tente novamente", tipo: 'failed'})
+          res.status(200).send({status: false, message: `Falha no pagamento: ${result.data.charges[0]?.last_transaction?.acquirer_message}`, tipo: 'failed'})
         }
 
         if(result.data.status == 'processing'){

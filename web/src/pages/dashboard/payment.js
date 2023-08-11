@@ -208,7 +208,7 @@ export default function Payment({runners, token, paymentValue}){
                         <select {...register('paymentMethod')} onChange={(e) => {setPaymentMethod(e.target.value)}} className={`${styles.inputFill}`} required>
                             <option value=''></option>
                             <option value='pix'>PIX</option>
-                            <option value='cardCredito' disabled>Cartão de Crédito *EM MANUTENÇÃO*</option>
+                            <option value='credito'>Cartão de Crédito</option>
                             <option value='boleto'>Boleto</option>
                             {/* <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option> */}
                         </select>
