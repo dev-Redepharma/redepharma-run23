@@ -185,7 +185,7 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'credito') {
-      let voucherCredito = ""
+      let voucherCredito = null
       if(voucher){
         if(voucher.length > 0){
           voucherCredito = voucher
