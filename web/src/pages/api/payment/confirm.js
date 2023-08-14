@@ -251,8 +251,6 @@ export default async function ConfirmPayAPI(req, res){
         
 
         if(result.data.charges[0].status == 'paid'){
-          axios.post('/api/info/updateRunner', {chargeId: result.data.charges[0].id, status: 'paid'})
-          .then(async resul => {
 
             if(voucher){
               if(voucher.length > 0){
@@ -262,13 +260,22 @@ export default async function ConfirmPayAPI(req, res){
                 await db.execute(queryUseVoucherForReal, valuesUseVoucherForReal);
               }
             }
+            
+            const queryDasCamisas = `SELECT camisas FROM transactions WHERE chargeId = ?`;
+            const valueDasCamisas = [chargeId];
+            const resultDasCamisas = await db.execute(queryDasCamisas, valueDasCamisas);
+
+            var runners = JSON.parse(resultDasCamisas[0][0].camisas);
+            
+            runners.map(async runner => {
+              const queryzinha = `UPDATE runners SET status = 'confirmado', shirtSize = ? WHERE id = ?`;
+              const valuezinho = [runner.tamanho, runner.id]
+              await db.execute(queryzinha, valuezinho)
+            })
+            
             db.end()
 
             res.status(200).send({status: true, message: "Pagamento autorizado"})
-          })
-          .catch(err => {
-            res.status(200).send({status: false, message: "Não foi possível atualizar o status do seu pagamento, não se preocupe, em até 30 minutos confirmaremos para você!"})
-          })
         }
 
         if(result.data.status == 'failed'){

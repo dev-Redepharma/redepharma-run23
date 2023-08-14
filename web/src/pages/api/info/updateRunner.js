@@ -19,7 +19,7 @@ export default async function UpdateRunner(req, res) {
         const valuesUpdate = [status, chargeId];
         db.execute(queryUpdate, valuesUpdate);
 
-        if(voucher){
+        if(voucher !== undefined){
           const queryUpdateVoucher = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ?`
           const valuesUpdateVoucher = [name, cpf, voucher]
           db.execute(queryUpdateVoucher, valuesUpdateVoucher)
