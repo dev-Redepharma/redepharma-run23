@@ -19,9 +19,11 @@ export default async function UpdateRunner(req, res) {
         const valuesUpdate = [status, chargeId];
         db.execute(queryUpdate, valuesUpdate);
 
-        const queryUpdateVoucher = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ?`
-        const valuesUpdateVoucher = [name, cpf, voucher]
-        db.execute(queryUpdateVoucher, valuesUpdateVoucher)
+        if(voucher){
+          const queryUpdateVoucher = `UPDATE vouchers SET usado = 'true', nome = ?, cpf = ? WHERE voucher = ?`
+          const valuesUpdateVoucher = [name, cpf, voucher]
+          db.execute(queryUpdateVoucher, valuesUpdateVoucher)
+        }
         
         var runners = JSON.parse(result[0][0].camisas);
 
