@@ -262,7 +262,7 @@ export default async function ConfirmPayAPI(req, res){
             }
             
             const queryDasCamisas = `SELECT camisas FROM transactions WHERE chargeId = ?`;
-            const valueDasCamisas = [chargeId];
+            const valueDasCamisas = [result.data.charges[0].id];
             const resultDasCamisas = await db.execute(queryDasCamisas, valueDasCamisas);
 
             var runners = JSON.parse(resultDasCamisas[0][0].camisas);
