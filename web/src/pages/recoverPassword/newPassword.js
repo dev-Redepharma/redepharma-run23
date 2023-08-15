@@ -35,7 +35,7 @@ export default function Login({id}) {
                     <title>Nova Senha | Redepharma RUN</title>
                 </Head>
                 <div className={styles.borderGradient}>
-                    <div className={styles.containerMain2}>
+                    <div className={styles.containerMain}>
                         <div className={styles.formDiv}>
                             <h1 className={`${styles.title}`}>Recuperar Senha</h1>
                             <form onSubmit={handleSubmit((data) => {
