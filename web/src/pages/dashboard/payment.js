@@ -325,6 +325,7 @@ export default function Payment({runners, token, paymentValue}){
                     {/* Input referente ao valor */}
                     <input {...register("paymentValue")} value={paymentValor} type="hidden"/>
                     {runners.length > 1 ? '' : 
+                        runners[0].bornDate.split('/')[2] <= 1963 ? '' :
                         <div className='flex items-center mb-2 gap-2'>
                             <div className='flex gap-2'>
                                 <label>Voucher:</label>
@@ -339,8 +340,8 @@ export default function Payment({runners, token, paymentValue}){
                                     if(result.data.status){
                                         setIsLoading(false)
                                         setHasError(result.data.message)
-                                        setPaymentValor(paymentValue * 0.8)
-                                        setValue('paymentValue', paymentValue * 0.8) 
+                                        setPaymentValor(paymentValue * 0.85)
+                                        setValue('paymentValue', paymentValue * 0.85) 
                                     }else{
                                         setHasError(result.data.message)
                                         setIsLoading(false)

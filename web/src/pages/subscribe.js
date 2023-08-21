@@ -44,6 +44,7 @@ export default function Subscribe() {
                                             .then(result => {
                                                 if(result.data.status == false) {
                                                     setHasError(result.data.message)
+                                                    setIsLoading(false)
                                                     return
                                                 }
                                                 router.push('/login')
