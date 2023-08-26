@@ -51,15 +51,16 @@ export default function Home() {
         <div className={styles.providers} id="sobre">
             <img onClick={() => {window.open("https://instagram.com/mink_oficial")}} className='cursor-pointer' src='mink.png' alt='mink o patrocinador'/>
             <img onClick={() => {window.open("https://www.instagram.com/tenabrasil")}} className='cursor-pointer' src='tena.png' alt='tena o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/cremeroficial")}} className='cursor-pointer' src='cremer.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://www.instagram.com/dorflex")}} className='cursor-pointer' src='dorflex.png' alt='tena o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/elmexbrasil")}} className='cursor-pointer' src='elmex.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://www.instagram.com/integralmedica")}} className='cursor-pointer' src='integral.png' alt='tena o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/maxtitaniumsuplementos")}} className='cursor-pointer' src='max.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://www.instagram.com/probioticaoficial")}} className='cursor-pointer' src='probiotica.png' alt='tena o patrocinador'/>
-            <img onClick={() => {window.open("https://instagram.com/sandozbrasil")}} className='cursor-pointer' src='sandoz.png' alt='mink o patrocinador'/>
-            <img onClick={() => {window.open("https://www.instagram.com/unifacisapb")}} className='cursor-pointer' src='unifacisa.png' alt='tena o patrocinador'/>
-            <img onClick={() => {window.open("https://www.instagram.com/yopro.br")}} className='cursor-pointer' src='yopro.png' alt='tena o patrocinador'/>
+            <img onClick={() => {window.open("https://instagram.com/cremeroficial")}} className='cursor-pointer' src='cremer.png' alt='cremer o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/dorflex")}} className='cursor-pointer' src='dorflex.png' alt='dorflex o patrocinador'/>
+            <img onClick={() => {window.open("https://instagram.com/elmexbrasil")}} className='cursor-pointer' src='elmex.png' alt='elmex o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/integralmedica")}} className='cursor-pointer' src='integral.png' alt='integral o patrocinador'/>
+            <img onClick={() => {window.open("https://instagram.com/maxtitaniumsuplementos")}} className='cursor-pointer' src='max.png' alt='max o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/probioticaoficial")}} className='cursor-pointer' src='probiotica.png' alt='probiotica o patrocinador'/>
+            <img onClick={() => {window.open("https://instagram.com/sandozbrasil")}} className='cursor-pointer' src='sandoz.png' alt='sandoz o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/unifacisapb")}} className='cursor-pointer' src='unifacisa.png' alt='unifacisa o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/yopro.br")}} className='cursor-pointer' src='yopro.png' alt='yopro o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/m2informatica")}} className='cursor-pointer' src='m2.png' alt='m2 o patrocinador'/>
         </div>
       </Marquee>
       <div className={styles.aboutSection}>
