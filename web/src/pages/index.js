@@ -61,6 +61,9 @@ export default function Home() {
             <img onClick={() => {window.open("https://www.instagram.com/unifacisapb")}} className='cursor-pointer' src='unifacisa.png' alt='unifacisa o patrocinador'/>
             <img onClick={() => {window.open("https://www.instagram.com/yopro.br")}} className='cursor-pointer' src='yopro.png' alt='yopro o patrocinador'/>
             <img onClick={() => {window.open("https://www.instagram.com/m2informatica")}} className='cursor-pointer' src='m2.png' alt='m2 o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/m2informatica")}} className='cursor-pointer' src='merck.png' alt='merck o patrocinador'/>
+            <img onClick={() => {window.open("https://www.instagram.com/sercosi_seguros")}} className='cursor-pointer' src='sercosi.png' alt='sercosi o patrocinador'/>
+            
         </div>
       </Marquee>
       <div className={styles.aboutSection}>
