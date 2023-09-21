@@ -81,41 +81,129 @@ export default function Payment({runners, token, paymentValue}){
             <div className={`${styles.box} ${runners.length > 1 ? '' : styles.boxRunner} ${runners.length > 1 && String(paymentValue) !== '0' ? '' : styles.boxRunnerInfo}`}>
                 {String(paymentValue) !== "0" ? 
                 <form className={`${styles.formFill}`} onSubmit={handleSubmit((data) => {
-                    if(cpf.isValid(data.cpf)){
-                        if(data.paymentMethod == 'pix'){
-                            setIsLoading(true)
-                            openModal()
-                            console.log(data)
-                            axios.post('/api/payment/confirm', {...data, token})
+                    if (data.voucher.trim().length == 0) {
+                        if(cpf.isValid(data.cpf)){
+                            if(data.paymentMethod == 'pix'){
+                                setIsLoading(true)
+                                openModal()
+                                console.log(data)
+                                axios.post('/api/payment/confirm', {...data, token})
+                                    .then(result => {
+                                        if(result.data.status == false){
+                                            setIsLoading(false)
+                                            closeModal()
+                                            setHasError("Ocorreu um erro, tente novamente.")
+                                            return
+                                        }
+                                        setImgPix(result?.data?.charges[0]?.last_transaction?.qr_code_url)
+                                        setCodePix(result?.data?.charges[0]?.last_transaction?.qr_code)
+        
+                                        var checkPayment = setInterval(() => {
+                                            axios.post('/api/payment/check', {id: result.data?.charges[0]?.id})
+                                            .then(resul => {
+                                                if(resul.data?.status == "paid"){
+                                                    axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status, voucher: data.voucher, name: data.name, cpf: data.cpf})
+                                                    .then(() => {clearInterval(checkPayment); router.push('/dashboard')})
+                                                    .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                                }
+                                            })
+                                            .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                        }, 5000)
+                                    })
+                                    .catch(err => {
+                                        setHasError("Ocorreu um erro, tente novamente.")
+                                        console.log(err)
+                                        setIsLoading(false)
+                                        closeModal()
+                                    })
+                            }
+                            if(data.paymentMethod == 'voucher'){
+                                setIsLoading(true)
+                                axios.post('/api/payment/confirm', {...data, token})
                                 .then(result => {
                                     if(result.data.status == false){
                                         setIsLoading(false)
-                                        closeModal()
-                                        setHasError("Ocorreu um erro, tente novamente.")
+                                        setHasError(result.data.message)
                                         return
                                     }
-                                    setImgPix(result?.data?.charges[0]?.last_transaction?.qr_code_url)
-                                    setCodePix(result?.data?.charges[0]?.last_transaction?.qr_code)
-    
-                                    var checkPayment = setInterval(() => {
-                                        axios.post('/api/payment/check', {id: result.data?.charges[0]?.id})
-                                        .then(resul => {
-                                            if(resul.data?.status == "paid"){
-                                                axios.post('/api/info/updateRunner', {chargeId: result.data?.charges[0]?.id, status: result.data?.status, voucher: data.voucher, name: data.name, cpf: data.cpf})
-                                                .then(() => {clearInterval(checkPayment); router.push('/dashboard')})
-                                                .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
+                                    router.push('/dashboard')
+                                })
+                            }
+                            if(data.paymentMethod == 'credito'){
+                                setIsLoading(true)
+                                axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
+                                .then(result => {
+                                    axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
+                                    .then(resultinho => {
+                                        if(resultinho.data.status == false){
+                                            setIsLoading(false)
+                                            setHasError(resultinho.data.message)
+                                            if(resultinho.data.tipo == 'processing'){
+                                                setIsLoading(true)
                                             }
-                                        })
-                                        .catch(() => {clearInterval(checkPayment); alert("Ocorreu um erro na verificação instantânea, não se preocupe, em até 30 minutos verificaremos para você."); router.push('/dashboard')})
-                                    }, 5000)
+                                            return
+                                        }
+                                        router.push('/dashboard')
+                                    })
+                                    .catch(err => {
+                                        setIsLoading(false)
+                                        console.log(err)
+                                        setHasError("Ocorreu um erro, tente novamente!")
+                                    })
                                 })
                                 .catch(err => {
-                                    setHasError("Ocorreu um erro, tente novamente.")
-                                    console.log(err)
                                     setIsLoading(false)
-                                    closeModal()
+                                    setHasError("CEP não localizado")
+                                    console.log(err)
                                 })
+                            }
+                            if(data.paymentMethod == 'boleto'){
+                                setIsLoading(true)
+                                
+                                axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
+                                .then(result => {
+                                    axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
+                                        .then(result => {
+                                            console.log(result.data)
+                                            if(result.data.status == false){
+                                                setIsLoading(false)
+                                                setHasError("Ocorreu um erro, tente novamente.")
+                                                return
+                                            }
+                                            if(result.data.status == 'failed') {
+                                                setIsLoading(false)
+                                                setHasError("Falha ao gerar o boleto, verifique seus dados e tente novamente!")
+                                                return
+                                            }
+                                            if(result.data.charges[0].last_transaction.status == 'genereted'){
+                                                window.open(result.data.charges[0].last_transaction.pdf)
+                                                router.push('/dashboard')
+                                                return
+                                            }
+                                            if(result.data.status == 'pending'){
+                                                window.open(result.data.charges[0].last_transaction.pdf)
+                                                router.push('/dashboard')
+                                                return
+                                            }
+                                            setIsLoading(false)
+                                            setHasError("Ocorreu um erro desconhecido, tente novamente!")
+                                        })
+                                        .catch(err => {
+                                            setIsLoading(false)
+                                            setHasError("Ocorreu um erro, tente novamente.")
+                                            console.log(err)
+                                        })
+                                    })
+                                .catch(err => {
+                                    setIsLoading(false)
+                                    setHasError("CEP não localizado")
+                                    console.log(err)
+                                })
+                            }
+                        }else{
+                            setHasError('CPF Inválido')
                         }
+                    }else {
                         if(data.paymentMethod == 'voucher'){
                             setIsLoading(true)
                             axios.post('/api/payment/confirm', {...data, token})
@@ -127,80 +215,9 @@ export default function Payment({runners, token, paymentValue}){
                                 }
                                 router.push('/dashboard')
                             })
+                        }else{
+                            setHasError('Selecione o pagamento como voucher')
                         }
-                        if(data.paymentMethod == 'credito'){
-                            setIsLoading(true)
-                            axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
-                            .then(result => {
-                                axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
-                                .then(resultinho => {
-                                    if(resultinho.data.status == false){
-                                        setIsLoading(false)
-                                        setHasError(resultinho.data.message)
-                                        if(resultinho.data.tipo == 'processing'){
-                                            setIsLoading(true)
-                                        }
-                                        return
-                                    }
-                                    router.push('/dashboard')
-                                })
-                                .catch(err => {
-                                    setIsLoading(false)
-                                    console.log(err)
-                                    setHasError("Ocorreu um erro, tente novamente!")
-                                })
-                            })
-                            .catch(err => {
-                                setIsLoading(false)
-                                setHasError("CEP não localizado")
-                                console.log(err)
-                            })
-                        }
-                        if(data.paymentMethod == 'boleto'){
-                            setIsLoading(true)
-                            
-                            axios.get(`https://brasilapi.com.br/api/cep/v1/${data.CEP}`)
-                            .then(result => {
-                                axios.post('/api/payment/confirm', {...data, token, houseinfo: result.data})
-                                    .then(result => {
-                                        console.log(result.data)
-                                        if(result.data.status == false){
-                                            setIsLoading(false)
-                                            setHasError("Ocorreu um erro, tente novamente.")
-                                            return
-                                        }
-                                        if(result.data.status == 'failed') {
-                                            setIsLoading(false)
-                                            setHasError("Falha ao gerar o boleto, verifique seus dados e tente novamente!")
-                                            return
-                                        }
-                                        if(result.data.charges[0].last_transaction.status == 'genereted'){
-                                            window.open(result.data.charges[0].last_transaction.pdf)
-                                            router.push('/dashboard')
-                                            return
-                                        }
-                                        if(result.data.status == 'pending'){
-                                            window.open(result.data.charges[0].last_transaction.pdf)
-                                            router.push('/dashboard')
-                                            return
-                                        }
-                                        setIsLoading(false)
-                                        setHasError("Ocorreu um erro desconhecido, tente novamente!")
-                                    })
-                                    .catch(err => {
-                                        setIsLoading(false)
-                                        setHasError("Ocorreu um erro, tente novamente.")
-                                        console.log(err)
-                                    })
-                                })
-                            .catch(err => {
-                                setIsLoading(false)
-                                setHasError("CEP não localizado")
-                                console.log(err)
-                            })
-                        }
-                    }else{
-                        setHasError('CPF Inválido')
                     }
                 })}>
                     <div className={`${styles.inputBox}`}>
@@ -210,7 +227,7 @@ export default function Payment({runners, token, paymentValue}){
                             <option value='pix'>PIX</option>
                             <option value='credito'>Cartão de Crédito</option>
                             <option value='boleto'>Boleto</option>
-                            {/* <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option> */}
+                            <option value='voucher' disabled={runners.length > 1 ? true : false}>Voucher</option>
                         </select>
                     </div>
                     <div className={`${styles.inputBox}`}>
@@ -340,8 +357,8 @@ export default function Payment({runners, token, paymentValue}){
                                     if(result.data.status){
                                         setIsLoading(false)
                                         setHasError(result.data.message)
-                                        setPaymentValor(paymentValue * 0.85)
-                                        setValue('paymentValue', paymentValue * 0.85) 
+                                        setPaymentValor(paymentValue * 0)
+                                        setValue('paymentValue', paymentValue * 0) 
                                     }else{
                                         setHasError(result.data.message)
                                         setIsLoading(false)
