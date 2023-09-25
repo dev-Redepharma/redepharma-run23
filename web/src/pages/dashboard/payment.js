@@ -494,9 +494,9 @@ export async function getServerSideProps(ctx) {
         if(runner.pcd || runner.lowIncome){
             paymentValue += 0
         }else if(Number(((runner.bornDate).split('/'))[2]) <= 1963){
-            paymentValue += 50
+            paymentValue += 55
         }else{
-            paymentValue += 100
+            paymentValue += 110
         }
     })
 

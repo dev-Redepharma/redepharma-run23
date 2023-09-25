@@ -130,7 +130,7 @@ export default function Home() {
                 </div>
                 <div className={styles.infoInvoice}>
                   <span>Corrida</span>
-                  <span>R$ 100,00</span>
+                  <span>R$ 110,00</span>
                 </div>
                 <ul className={styles.listItems}>
                   <li>Mochila</li>
@@ -140,7 +140,7 @@ export default function Home() {
             </div>
             <div className={styles.subTotal}>
               <span>Valor total</span>
-              <span>R$ 100,00</span>
+              <span>R$ 110,00</span>
             </div>
           </div>
         </div>
