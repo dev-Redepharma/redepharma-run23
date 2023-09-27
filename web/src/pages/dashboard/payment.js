@@ -38,7 +38,7 @@ export default function Payment({runners, token, paymentValue}){
     const [isLoading, setIsLoading] = useState(false);
     const [imgPix, setImgPix] = useState('');
     const [codePix, setCodePix] = useState('');
-    const [hasError, setHasError] = useState(null);
+    const [hasError, setHasError] = useState();
     const [modalIsOpen, setIsOpen] = useState(false);
     const [voucher, setVoucher] = useState('');
     const [paymentValor, setPaymentValor] = useState(paymentValue)
@@ -81,7 +81,8 @@ export default function Payment({runners, token, paymentValue}){
             <div className={`${styles.box} ${runners.length > 1 ? '' : styles.boxRunner} ${runners.length > 1 && String(paymentValue) !== '0' ? '' : styles.boxRunnerInfo}`}>
                 {String(paymentValue) !== "0" ? 
                 <form className={`${styles.formFill}`} onSubmit={handleSubmit((data) => {
-                    if (data.voucher.trim().length == 0) {
+                    console.log(data)
+                    if (data.voucher?.trim().length == 0 || !data.voucher) {
                         if(cpf.isValid(data.cpf)){
                             if(data.paymentMethod == 'pix'){
                                 setIsLoading(true)
@@ -92,7 +93,7 @@ export default function Payment({runners, token, paymentValue}){
                                         if(result.data.status == false){
                                             setIsLoading(false)
                                             closeModal()
-                                            setHasError("Ocorreu um erro, tente novamente.")
+                                            setHasError(result.data.message)
                                             return
                                         }
                                         setImgPix(result?.data?.charges[0]?.last_transaction?.qr_code_url)
@@ -445,7 +446,7 @@ export default function Payment({runners, token, paymentValue}){
                 <div className={`${styles.paymentResumeBox}`}>
                     <h1 className={`${styles.paymentResumeTitle}`}>Resumo do pagamento</h1>
                     <div className={`${styles.inputBox}`}>
-                        {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$0,00' : runner.lowIncome ? 'R$0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$'+paymentValor+',00' : 'R$'+paymentValor+',00'}</span>)}
+                        {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$0,00' : runner.lowIncome ? 'R$0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$'+`${runners.length > 1 ? (paymentValor / 2) : paymentValor}`+',00' : 'R$'+`${runners.length > 1 ? (paymentValor / 2) : paymentValor}`+',00'}</span>)}
                     </div>
                     <div className={`${styles.paymentResumeTotalPrice}`}>
                         <span className={`${styles.paymentResumeTotalPriceTitle}`}>Subtotal:</span>
