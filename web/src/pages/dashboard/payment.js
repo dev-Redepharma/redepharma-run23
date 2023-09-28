@@ -446,7 +446,7 @@ export default function Payment({runners, token, paymentValue}){
                 <div className={`${styles.paymentResumeBox}`}>
                     <h1 className={`${styles.paymentResumeTitle}`}>Resumo do pagamento</h1>
                     <div className={`${styles.inputBox}`}>
-                        {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$0,00' : runner.lowIncome ? 'R$0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$'+`${runners.length > 1 ? (paymentValor / 2) : paymentValor}`+',00' : 'R$'+`${runners.length > 1 ? (paymentValor / 2) : paymentValor}`+',00'}</span>)}
+                        {runners.map(runner => <span key={runner.id} className='italic'>{runner.name} - {runner.pcd ? 'R$ 0,00' : runner.lowIncome ? 'R$ 0,00' : Number(((runner.bornDate).split('/'))[2]) <= 1963 ? 'R$ 55,00' : 'R$ 110,00'}</span>)}
                     </div>
                     <div className={`${styles.paymentResumeTotalPrice}`}>
                         <span className={`${styles.paymentResumeTotalPriceTitle}`}>Subtotal:</span>
