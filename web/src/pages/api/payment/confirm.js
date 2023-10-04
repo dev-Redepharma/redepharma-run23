@@ -193,6 +193,51 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'gratis') {
+      const consultas = [
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'p'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+      ];
+      
+      const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
+      
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      
+      const limiteCamisaP = 900 
+      const limiteCamisaM = 1400
+      const limiteCamisaG = 700
+      const limiteCamisaGG = 300
+  
+      for (let i = 0; i < camisa.length; i++) {
+        let texto = ""
+        if(camisa[i].tamanho == 'p'){
+          if(qtdCamisaP >= limiteCamisaP){
+            texto += "O limite de camisas P já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'm'){
+          if(qtdCamisaM >= limiteCamisaM){
+            texto += "O limite de camisas M já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'g'){
+          console.log(qtdCamisaG)
+          if(qtdCamisaG >= limiteCamisaG){
+            texto += "O limite de camisas G já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'gg'){
+          if(qtdCamisaGG >= limiteCamisaGG){
+            texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if (texto.length > 0){
+            db.end()
+            res.send({status: false, message: texto})
+        }
+      }
+
       camisa.map(runner => {
         try{
           const queryUpdateVoucherRunner = `UPDATE runners SET status = 'confirmado', shirtSize = ? WHERE id = ?`;
@@ -207,6 +252,51 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'voucher') {
+      const consultas = [
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'p'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+      ];
+      
+      const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
+      
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      
+      const limiteCamisaP = 900 
+      const limiteCamisaM = 1400
+      const limiteCamisaG = 700
+      const limiteCamisaGG = 300
+  
+      for (let i = 0; i < camisa.length; i++) {
+        let texto = ""
+        if(camisa[i].tamanho == 'p'){
+          if(qtdCamisaP >= limiteCamisaP){
+            texto += "O limite de camisas P já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'm'){
+          if(qtdCamisaM >= limiteCamisaM){
+            texto += "O limite de camisas M já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'g'){
+          console.log(qtdCamisaG)
+          if(qtdCamisaG >= limiteCamisaG){
+            texto += "O limite de camisas G já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'gg'){
+          if(qtdCamisaGG >= limiteCamisaGG){
+            texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if (texto.length > 0){
+            db.end()
+            res.send({status: false, message: texto})
+        }
+      }
+
       const queryGetVoucher = `SELECT * FROM vouchers WHERE voucher = ? AND usado != 'true' AND STR_TO_DATE(validade, '%d/%m/%Y') >= CURRENT_DATE()`;
       
       const valuesGetVoucher = [voucher];
@@ -230,6 +320,51 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'credito') {
+      const consultas = [
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'p'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+      ];
+      
+      const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
+      
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      
+      const limiteCamisaP = 900 
+      const limiteCamisaM = 1400
+      const limiteCamisaG = 700
+      const limiteCamisaGG = 300
+  
+      for (let i = 0; i < camisa.length; i++) {
+        let texto = ""
+        if(camisa[i].tamanho == 'p'){
+          if(qtdCamisaP >= limiteCamisaP){
+            texto += "O limite de camisas P já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'm'){
+          if(qtdCamisaM >= limiteCamisaM){
+            texto += "O limite de camisas M já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'g'){
+          console.log(qtdCamisaG)
+          if(qtdCamisaG >= limiteCamisaG){
+            texto += "O limite de camisas G já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'gg'){
+          if(qtdCamisaGG >= limiteCamisaGG){
+            texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if (texto.length > 0){
+            db.end()
+            res.send({status: false, message: texto})
+        }
+      }
+
       let voucherCredito = null
       if(voucher){
         if(voucher.length > 0){
@@ -341,6 +476,51 @@ export default async function ConfirmPayAPI(req, res){
     }
 
     if(paymentMethod == 'boleto') {
+      const consultas = [
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'p'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+      ];
+      
+      const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
+      
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      
+      const limiteCamisaP = 900 
+      const limiteCamisaM = 1400
+      const limiteCamisaG = 700
+      const limiteCamisaGG = 300
+  
+      for (let i = 0; i < camisa.length; i++) {
+        let texto = ""
+        if(camisa[i].tamanho == 'p'){
+          if(qtdCamisaP >= limiteCamisaP){
+            texto += "O limite de camisas P já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'm'){
+          if(qtdCamisaM >= limiteCamisaM){
+            texto += "O limite de camisas M já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'g'){
+          console.log(qtdCamisaG)
+          if(qtdCamisaG >= limiteCamisaG){
+            texto += "O limite de camisas G já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'gg'){
+          if(qtdCamisaGG >= limiteCamisaGG){
+            texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if (texto.length > 0){
+            db.end()
+            res.send({status: false, message: texto})
+        }
+      }
+
       let now = new Date();
       let dueDate = date.format(date.addDays(now, 3), 'YYYY-MM-DD');
 
