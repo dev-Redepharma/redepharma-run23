@@ -337,6 +337,10 @@ export default function Payment({runners, token, paymentValue}){
                                     <input {...register("camisa"+index)} type="radio" value={`gg/${runner.id}`} id={'camisaGG' + runner.id} required/>
                                     <label htmlFor={'camisaGG' + runner.id}>GG</label>
                                 </div>
+                                <div>
+                                    <input {...register("camisa"+index)} type="radio" value={`xg/${runner.id}`} id={'camisaXG' + runner.id} required/>
+                                    <label htmlFor={'camisaXG' + runner.id}>XG</label>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -427,6 +431,10 @@ export default function Payment({runners, token, paymentValue}){
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`gg/${runner.id}`} id={'camisaGG' + runner.id} required/>
                                     <label htmlFor={'camisaGG' + runner.id}>GG</label>
+                                </div>
+                                <div>
+                                    <input {...register("camisa"+index)} type="radio" value={`xg/${runner.id}`} id={'camisaXG' + runner.id} required/>
+                                    <label htmlFor={'camisaXG' + runner.id}>XG</label>
                                 </div>
                             </div>
                         )}

@@ -97,16 +97,18 @@ export default async function ConfirmPayAPI(req, res){
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'xg'`,
       ];
       
       const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
       
-      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
       const limiteCamisaM = 1400
       const limiteCamisaG = 700
-      const limiteCamisaGG = 300
+      const limiteCamisaGG = 250
+      const limiteCamisaXG = 50
   
       for (let i = 0; i < camisa.length; i++) {
         let texto = ""
@@ -129,6 +131,11 @@ export default async function ConfirmPayAPI(req, res){
         if(camisa[i].tamanho == 'gg'){
           if(qtdCamisaGG >= limiteCamisaGG){
             texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'xg'){
+          if(qtdCamisaXG >= limiteCamisaXG){
+            texto += "O limite de camisas XG já foi atingido"
           }
         }
         if (texto.length > 0){
@@ -198,16 +205,18 @@ export default async function ConfirmPayAPI(req, res){
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'xg'`,
       ];
       
       const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
       
-      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
       const limiteCamisaM = 1400
       const limiteCamisaG = 700
-      const limiteCamisaGG = 300
+      const limiteCamisaGG = 250
+      const limiteCamisaXG = 50
   
       for (let i = 0; i < camisa.length; i++) {
         let texto = ""
@@ -230,6 +239,11 @@ export default async function ConfirmPayAPI(req, res){
         if(camisa[i].tamanho == 'gg'){
           if(qtdCamisaGG >= limiteCamisaGG){
             texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'xg'){
+          if(qtdCamisaXG >= limiteCamisaXG){
+            texto += "O limite de camisas XG já foi atingido"
           }
         }
         if (texto.length > 0){
@@ -257,16 +271,18 @@ export default async function ConfirmPayAPI(req, res){
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'xg'`,
       ];
       
       const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
       
-      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
       const limiteCamisaM = 1400
       const limiteCamisaG = 700
-      const limiteCamisaGG = 300
+      const limiteCamisaGG = 250
+      const limiteCamisaXG = 50
   
       for (let i = 0; i < camisa.length; i++) {
         let texto = ""
@@ -289,6 +305,11 @@ export default async function ConfirmPayAPI(req, res){
         if(camisa[i].tamanho == 'gg'){
           if(qtdCamisaGG >= limiteCamisaGG){
             texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'xg'){
+          if(qtdCamisaXG >= limiteCamisaXG){
+            texto += "O limite de camisas XG já foi atingido"
           }
         }
         if (texto.length > 0){
@@ -325,16 +346,18 @@ export default async function ConfirmPayAPI(req, res){
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'xg'`,
       ];
       
       const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
       
-      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
       const limiteCamisaM = 1400
       const limiteCamisaG = 700
-      const limiteCamisaGG = 300
+      const limiteCamisaGG = 250
+      const limiteCamisaXG = 50
   
       for (let i = 0; i < camisa.length; i++) {
         let texto = ""
@@ -357,6 +380,11 @@ export default async function ConfirmPayAPI(req, res){
         if(camisa[i].tamanho == 'gg'){
           if(qtdCamisaGG >= limiteCamisaGG){
             texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'xg'){
+          if(qtdCamisaXG >= limiteCamisaXG){
+            texto += "O limite de camisas XG já foi atingido"
           }
         }
         if (texto.length > 0){
@@ -481,16 +509,18 @@ export default async function ConfirmPayAPI(req, res){
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'm'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'g'`,
         `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'gg'`,
+        `SELECT COUNT(*) as total FROM runners WHERE status = 'confirmado' AND shirtSize = 'xg'`
       ];
       
       const resultados = await Promise.all(consultas.map(consulta => db.execute(consulta, [])));
       
-      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG] = resultados.map(resultado => resultado[0][0].total);
+      const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
       const limiteCamisaM = 1400
       const limiteCamisaG = 700
-      const limiteCamisaGG = 300
+      const limiteCamisaGG = 250
+      const limiteCamisaXG = 50
   
       for (let i = 0; i < camisa.length; i++) {
         let texto = ""
@@ -513,6 +543,11 @@ export default async function ConfirmPayAPI(req, res){
         if(camisa[i].tamanho == 'gg'){
           if(qtdCamisaGG >= limiteCamisaGG){
             texto += "O limite de camisas GG já foi atingido"
+          }
+        }
+        if(camisa[i].tamanho == 'xg'){
+          if(qtdCamisaXG >= limiteCamisaXG){
+            texto += "O limite de camisas XG já foi atingido"
           }
         }
         if (texto.length > 0){
