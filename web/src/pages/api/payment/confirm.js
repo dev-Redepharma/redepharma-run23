@@ -6,10 +6,10 @@ import {v4} from 'uuid'
 export default async function ConfirmPayAPI(req, res){
   if(req.method === 'POST'){
     const db = await mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DB
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DB
     });
 
     db.connect()

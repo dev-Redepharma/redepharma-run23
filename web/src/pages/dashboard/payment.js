@@ -321,10 +321,10 @@ export default function Payment({runners, token, paymentValue}){
                         {runners.map((runner, index) => 
                             <div key={runner.id} className={`${styles.shirtInfo}`}>
                                 <span>{runner.name}:</span>
-                                <div>
+                                {/* <div>
                                     <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
                                     <label htmlFor={'camisaP' + runner.id}>P</label>
-                                </div>
+                                </div> */}
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`m/${runner.id}`} id={'camisaM' + runner.id} required/>
                                     <label htmlFor={'camisaM' + runner.id}>M</label>
@@ -416,10 +416,10 @@ export default function Payment({runners, token, paymentValue}){
                         {runners.map((runner, index) => 
                             <div key={runner.id} className={`${styles.shirtInfo}`}>
                                 <span>{runner.name}:</span>
-                                <div>
+                                {/* <div>
                                     <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
                                     <label htmlFor={'camisaP' + runner.id}>P</label>
-                                </div>
+                                </div> */}
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`m/${runner.id}`} id={'camisaM' + runner.id} required/>
                                     <label htmlFor={'camisaM' + runner.id}>M</label>
