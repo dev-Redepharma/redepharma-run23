@@ -105,7 +105,7 @@ export default async function ConfirmPayAPI(req, res){
       const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
-      const limiteCamisaM = 1400
+      const limiteCamisaM = 1389
       const limiteCamisaG = 700
       const limiteCamisaGG = 250
       const limiteCamisaXG = 50
@@ -213,7 +213,7 @@ export default async function ConfirmPayAPI(req, res){
       const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
-      const limiteCamisaM = 1400
+      const limiteCamisaM = 1389
       const limiteCamisaG = 700
       const limiteCamisaGG = 250
       const limiteCamisaXG = 50
@@ -279,7 +279,7 @@ export default async function ConfirmPayAPI(req, res){
       const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
-      const limiteCamisaM = 1400
+      const limiteCamisaM = 1389
       const limiteCamisaG = 700
       const limiteCamisaGG = 250
       const limiteCamisaXG = 50
@@ -354,7 +354,7 @@ export default async function ConfirmPayAPI(req, res){
       const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
-      const limiteCamisaM = 1400
+      const limiteCamisaM = 1389
       const limiteCamisaG = 700
       const limiteCamisaGG = 250
       const limiteCamisaXG = 50
@@ -517,7 +517,7 @@ export default async function ConfirmPayAPI(req, res){
       const [qtdCamisaP, qtdCamisaM, qtdCamisaG, qtdCamisaGG, qtdCamisaXG] = resultados.map(resultado => resultado[0][0].total);
       
       const limiteCamisaP = 900 
-      const limiteCamisaM = 1400
+      const limiteCamisaM = 1389
       const limiteCamisaG = 700
       const limiteCamisaGG = 250
       const limiteCamisaXG = 50
