@@ -31,6 +31,11 @@ export default function NewRunner({token, id, numberLowIncome}) {
 
     const router = useRouter()
 
+    useEffect(() => {
+        router.push('/dashboard')
+    }, [])
+
+
     function handleChangePCD(){
         setIsPCD(!isPCD)
     }
@@ -185,8 +190,8 @@ export default function NewRunner({token, id, numberLowIncome}) {
                 </div>
                 <div className={`${stylesRunner.bottomBox}`}>
                     <div className={`${stylesRunner.bottomButtons}`}>
-                        {uploadingFB ? '' : isLoading ? '' : <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>}
-                        {uploadingFB ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : isLoading ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>}
+                        {/* {uploadingFB ? '' : isLoading ? '' : <input className={`cursor-pointer ${stylesRunner.buttonAddRunner}`} type='submit' value='Adicionar Corredor'/>} */}
+                        {/* {uploadingFB ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : isLoading ? <InfinitySpin color= '#E94E1B' size={25}></InfinitySpin> : <div className={`cursor-pointer ${stylesRunner.buttonCancel}`} onClick={() => {router.push('/dashboard')}}>Cancelar</div>} */}
                         
                     </div>
                     <div className={stylesRunner.messageError}>

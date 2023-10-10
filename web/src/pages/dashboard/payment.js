@@ -52,6 +52,10 @@ export default function Payment({runners, token, paymentValue}){
         setIsOpen(false);
     }
 
+    useEffect(() => {
+        router.push('/dashboard')
+    }, [])
+
     return(
         <main className={inter.className}>
             <Head>
@@ -384,7 +388,7 @@ export default function Payment({runners, token, paymentValue}){
                     </div>
                     :
                     <div>
-                        <input value="Realizar Pagamento" className={styles.button} type="submit"/>
+                        {/* <input value="Realizar Pagamento" className={styles.button} type="submit"/> */}
                     </div>
                     }
 

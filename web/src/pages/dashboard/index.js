@@ -63,10 +63,10 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                         <span>
                             {confimatedRunner}/{runners.length} Confirmados
                         </span>
-                        <div onClick={() => router.push('/dashboard/newRunner')} className={`${styles.boxAddRunner} ${styles.button}`}>
+                        {/* <div onClick={() => router.push('/dashboard/newRunner')} className={`${styles.boxAddRunner} ${styles.button}`}>
                             <HiUserAdd size={25}></HiUserAdd>
                             <span>Novo Corredor</span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 {runners.length < 1 ? 
@@ -124,7 +124,7 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                 : ''}
 
                 {/* VERIFICA SE EXISTE AINDA PESSOAS PARA PAGAR */}
-                {pendingPayment ? 
+                {/* {pendingPayment ? 
                     <div className={`${styles.infoAboutPendingPayment} ${analisingRunner ? '' : styles.infoAboutPendingPaymentAnalysing}`}>
                         <p>Resta o pagamento de {pendingPayment} pessoa(s). <br/>Garanta a inscrição, realize o pagamento.</p>
                         <div className={`${styles.payButton} ${styles.button}`} onClick={() => {
@@ -134,7 +134,10 @@ export default function Dashboard({runners, pendingPayment, analisingRunner, con
                             <span>Pagar Agora</span>
                         </div>
                     </div>
-                : ''}
+                : ''} */}
+                <div className={`items-center flex justify-center`}>
+                        <p className="font-bold text-[30px]">Inscrições encerradas</p>
+                </div>
 
                 {/* VERIFICAR SE ESTÃO TODOS CONFIRMADOS, E SE É MAIOR QUE 1*/}
                 {runners.length == confimatedRunner ? 
