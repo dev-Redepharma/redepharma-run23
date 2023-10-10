@@ -325,10 +325,10 @@ export default function Payment({runners, token, paymentValue}){
                                     <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
                                     <label htmlFor={'camisaP' + runner.id}>P</label>
                                 </div> */}
-                                <div>
+                                {/* <div>
                                     <input {...register("camisa"+index)} type="radio" value={`m/${runner.id}`} id={'camisaM' + runner.id} required/>
                                     <label htmlFor={'camisaM' + runner.id}>M</label>
-                                </div>
+                                </div> */}
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`g/${runner.id}`} id={'camisaG' + runner.id} required/>
                                     <label htmlFor={'camisaG' + runner.id}>G</label>
@@ -420,10 +420,10 @@ export default function Payment({runners, token, paymentValue}){
                                     <input {...register("camisa"+index)} type="radio" value={`p/${runner.id}`} id={'camisaP' + runner.id} required/>
                                     <label htmlFor={'camisaP' + runner.id}>P</label>
                                 </div> */}
-                                <div>
+                                {/* <div>
                                     <input {...register("camisa"+index)} type="radio" value={`m/${runner.id}`} id={'camisaM' + runner.id} required/>
                                     <label htmlFor={'camisaM' + runner.id}>M</label>
-                                </div>
+                                </div> */}
                                 <div>
                                     <input {...register("camisa"+index)} type="radio" value={`g/${runner.id}`} id={'camisaG' + runner.id} required/>
                                     <label htmlFor={'camisaG' + runner.id}>G</label>
