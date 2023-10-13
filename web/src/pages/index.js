@@ -148,8 +148,8 @@ export default function Home() {
         <div className={styles.getKit}>
           <div className={styles.cardGetKit}>
             <h2>Retirada do KIT</h2>
-            <p>A retirada do kit acontecerá entre os dias 19 e 21 de outubro.</p>
-            <p>Local da retirada: Redepharma R50, Av. Manoel Tavares,400 - Jardim Taveres.</p>
+            <p>A retirada do kit acontecerá entre os dias 18 e 21 de outubro.</p>
+            <p>Local da retirada: Redepharma Naturais R49, Rua Marquês do Herval, 132, Centro</p>
             <p>Levar documento com foto e o cartão de confirmação, que será gerado ao final da inscrição.</p>
           </div>
         </div>
